@@ -1,8 +1,8 @@
 import 'package:suzuki/util/mode_util.dart';
 
 class ApiEndPoint {
-  String baseUrl = "http://172.20.10.13/hris_suzuki_api";
-  String baseUrlDebug = "http://172.20.10.13/hris_suzuki_api";
+  String baseUrl = "http://172.20.10.13/hris_suzuki_api/api/";
+  String baseUrlDebug = "http://172.20.10.13/hris_suzuki_api/api/";
   String webSocketUrl = "";
   String webSocketUrlDebug = "";
   String loginUrl = "auth/login";

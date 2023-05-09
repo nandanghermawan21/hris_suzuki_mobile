@@ -37,7 +37,7 @@ class SplashScreenViewState extends State<SplashScreenView> {
         cover: false,
         loadingBuilder: onLoading,
         child: Scaffold(
-          backgroundColor: System.data.color!.primaryColor,
+          backgroundColor: System.data.color!.background,
           body: Stack(
             children: [
               Align(
