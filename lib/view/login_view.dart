@@ -40,172 +40,161 @@ class LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          colors: [
-            System.data.color!.primaryColorLight,
-            System.data.color!.primaryColor,
-          ],
-        ),
-      ),
-      child: ChangeNotifierProvider.value(
-        value: loginViewModel,
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: false,
-          body: CircularLoaderComponent(
-            controller: loginViewModel.loadingController,
-            child: Container(
-              color: Colors.transparent,
-              width: double.infinity,
-              height: double.infinity,
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: logo(),
-                  ),
-                  Center(
-                    child: loginForm(),
-                  ),
-                  Consumer<LoginViewModel>(
-                    builder: (c, d, w) {
-                      return !loginViewModel.canAuhth ||
-                              System.data.session!
-                                      .getBool(SessionKey.userByBio) !=
-                                  true
-                          ? const SizedBox()
-                          : Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 80),
-                                padding: const EdgeInsets.all(5),
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(8)),
-                                    color: System.data.color!.primaryColor),
-                                child: System.data.session!
-                                            .getBool(SessionKey.userByBio) ==
-                                        true
-                                    ? GestureDetector(
-                                        onTap: () {
-                                          if (Platform.isIOS) {
+    return ChangeNotifierProvider.value(
+      value: loginViewModel,
+      child: Scaffold(
+        backgroundColor: System.data.color!.background,
+        resizeToAvoidBottomInset: false,
+        body: CircularLoaderComponent(
+          controller: loginViewModel.loadingController,
+          child: Container(
+            color: Colors.transparent,
+            width: double.infinity,
+            height: double.infinity,
+            child: Stack(
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: logo(),
+                ),
+                Center(
+                  child: loginForm(),
+                ),
+                Consumer<LoginViewModel>(
+                  builder: (c, d, w) {
+                    return !loginViewModel.canAuhth ||
+                            System.data.session!
+                                    .getBool(SessionKey.userByBio) !=
+                                true
+                        ? const SizedBox()
+                        : Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                              margin: const EdgeInsets.only(bottom: 80),
+                              padding: const EdgeInsets.all(5),
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8)),
+                                  color: System.data.color!.primaryColor),
+                              child: System.data.session!
+                                          .getBool(SessionKey.userByBio) ==
+                                      true
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        if (Platform.isIOS) {
+                                          loginViewModel
+                                              .retrieveSecretOnLocker(
+                                                  widget.onLoginSuccess ??
+                                                      () {});
+                                        } else {
+                                          if (loginViewModel.canBio) {
                                             loginViewModel
                                                 .retrieveSecretOnLocker(
                                                     widget.onLoginSuccess ??
                                                         () {});
                                           } else {
-                                            if (loginViewModel.canBio) {
-                                              loginViewModel
-                                                  .retrieveSecretOnLocker(
-                                                      widget.onLoginSuccess ??
-                                                          () {});
-                                            } else {
-                                              loginViewModel
-                                                  .retrieveSecretOnLocalAuth(
-                                                      widget.onLoginSuccess ??
-                                                          () {});
-                                            }
+                                            loginViewModel
+                                                .retrieveSecretOnLocalAuth(
+                                                    widget.onLoginSuccess ??
+                                                        () {});
                                           }
-                                        },
-                                        child: const Icon(
-                                          Icons.fingerprint,
-                                          size: 40,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : const SizedBox(),
+                                        }
+                                      },
+                                      child: const Icon(
+                                        Icons.fingerprint,
+                                        size: 40,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ),
+                          );
+                  },
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Versi : ",
+                                style:
+                                    System.data.textStyles!.basicLabel,
                               ),
-                            );
-                    },
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      child: IntrinsicHeight(
-                        child: Column(
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Versi : ",
-                                  style:
-                                      System.data.textStyles!.basicLightLabel,
+                              Text(
+                                System.data.versionName,
+                                style:
+                                    System.data.textStyles!.basicLabel,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Model : ",
+                                style:
+                                    System.data.textStyles!.basicLabel,
+                              ),
+                              Text(
+                                System.data.deviceInfo?.deviceModel ?? "",
+                                style:
+                                    System.data.textStyles!.basicLabel,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "DeviceId : ",
+                                style:
+                                    System.data.textStyles!.basicLabel,
+                              ),
+                              Text(
+                                System.data.deviceInfo?.deviceId ?? "",
+                                style:
+                                    System.data.textStyles!.basicLabel,
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Clipboard.setData(ClipboardData(
+                                          text: System
+                                              .data.deviceInfo?.deviceId))
+                                      .then((value) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: Text(
+                                          "${System.data.deviceInfo?.deviceId} telah di copy ke clipboard"),
+                                    ));
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.copy,
+                                  color: System.data.color!.darkTextColor,
                                 ),
-                                Text(
-                                  System.data.versionName,
-                                  style:
-                                      System.data.textStyles!.basicLightLabel,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Model : ",
-                                  style:
-                                      System.data.textStyles!.basicLightLabel,
-                                ),
-                                Text(
-                                  System.data.deviceInfo?.deviceModel ?? "",
-                                  style:
-                                      System.data.textStyles!.basicLightLabel,
-                                ),
-                              ],
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "DeviceId : ",
-                                  style:
-                                      System.data.textStyles!.basicLightLabel,
-                                ),
-                                Text(
-                                  System.data.deviceInfo?.deviceId ?? "",
-                                  style:
-                                      System.data.textStyles!.basicLightLabel,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    Clipboard.setData(ClipboardData(
-                                            text: System
-                                                .data.deviceInfo?.deviceId))
-                                        .then((value) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                        content: Text(
-                                            "${System.data.deviceInfo?.deviceId} telah di copy ke clipboard"),
-                                      ));
-                                    });
-                                  },
-                                  child: Icon(
-                                    Icons.copy,
-                                    color: System.data.color!.lightTextColor,
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
+                              )
+                            ],
+                          )
+                        ],
                       ),
                     ),
-                  )
-                ],
-              ),
+                  ),
+                )
+              ],
             ),
           ),
         ),
@@ -228,127 +217,136 @@ class LoginViewState extends State<LoginView> {
   }
 
   Widget loginForm() {
-    return Container(
-      height: 380,
-      color: Colors.transparent,
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              margin: const EdgeInsets.only(left: 20, right: 20),
-              padding: const EdgeInsets.only(
-                  top: 60, bottom: 15, left: 25, right: 25),
-              height: 330,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    System.data.strings!.login,
-                    style: TextStyle(
-                      color: System.data.color!.link,
-                      fontSize: System.data.font!.xxl,
-                      fontWeight: FontWeight.bold,
-                    ),
+    return IntrinsicHeight(
+      child: Container(
+        color: Colors.transparent,
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: IntrinsicHeight(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  padding: const EdgeInsets.only(
+                      top: 15, bottom: 15, left: 25, right: 25),
+                  decoration:  BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      top: BorderSide(
+                        color: System.data.color!.primaryColor,
+                        width: 5,
+                      )
+                    )
                   ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                    color: Colors.transparent,
-                    height: 50,
-                    child: InputComponent.inputText(
-                      controller: loginViewModel.usernameController,
-                      hint: System.data.strings!.userName,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    color: Colors.transparent,
-                    height: 50,
-                    child: InputComponent.inputText(
-                      controller: loginViewModel.passwordController,
-                      hint: System.data.strings!.password,
-                      obscureText: true,
-                    ),
-                  ),
-                  Container(
-                    color: Colors.transparent,
-                    width: double.infinity,
-                    margin: const EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      // children: [
-                      //   Row(
-                      //     children: [
-                      //       Text(
-                      //         System.data.strings!.rememberMe,
-                      //         style: TextStyle(
-                      //           color: System.data.color!.darkTextColor,
-                      //           fontSize: System.data.font!.m,
-                      //           fontWeight: FontWeight.bold,
-                      //         ),
-                      //       ),
-                      //       const SizedBox(
-                      //         width: 5,
-                      //       ),
-                      //       Checkbox(value: false, onChanged: (v) {})
-                      //     ],
-                      //   ),
-                      //   Text(
-                      //     System.data.strings!.forgotPassword,
-                      //     style: TextStyle(
-                      //       color: System.data.color!.link,
-                      //       fontSize: System.data.font!.m,
-                      //       fontWeight: FontWeight.bold,
-                      //     ),
-                      //   ),
-                      // ],
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    color: Colors.transparent,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        loginViewModel.login(
-                          onLOginSuccess: widget.onLoginSuccess,
-                        );
-                      },
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(System.data.color!.link),
-                      ),
-                      child: Text(
-                        System.data.strings!.login,
-                        style: TextStyle(
-                          color: System.data.color!.lightTextColor,
-                          fontSize: System.data.font!.xxxl,
-                          fontWeight: FontWeight.bold,
+                  child: Column(
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          text: "HRIS",
+                          style: TextStyle(
+                            color: System.data.color!.link,
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: "MOB",
+                              style: TextStyle(
+                                color: System.data.color!.primaryColor,
+                                fontSize: 40,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                    ),
-                  )
-                ],
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Container(
+                        color: Colors.transparent,
+                        height: 50,
+                        child: InputComponent.inputText(
+                          controller: loginViewModel.usernameController,
+                          hint: System.data.strings!.userName,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Container(
+                        color: Colors.transparent,
+                        height: 50,
+                        child: InputComponent.inputText(
+                          controller: loginViewModel.passwordController,
+                          hint: System.data.strings!.password,
+                          obscureText: true,
+                        ),
+                      ),
+                      Container(
+                        color: Colors.transparent,
+                        width: double.infinity,
+                        margin: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // children: [
+                          //   Row(
+                          //     children: [
+                          //       Text(
+                          //         System.data.strings!.rememberMe,
+                          //         style: TextStyle(
+                          //           color: System.data.color!.darkTextColor,
+                          //           fontSize: System.data.font!.m,
+                          //           fontWeight: FontWeight.bold,
+                          //         ),
+                          //       ),
+                          //       const SizedBox(
+                          //         width: 5,
+                          //       ),
+                          //       Checkbox(value: false, onChanged: (v) {})
+                          //     ],
+                          //   ),
+                          //   Text(
+                          //     System.data.strings!.forgotPassword,
+                          //     style: TextStyle(
+                          //       color: System.data.color!.link,
+                          //       fontSize: System.data.font!.m,
+                          //       fontWeight: FontWeight.bold,
+                          //     ),
+                          //   ),
+                          // ],
+                        ),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        color: Colors.transparent,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            loginViewModel.login(
+                              onLOginSuccess: widget.onLoginSuccess,
+                            );
+                          },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(
+                                System.data.color!.link),
+                          ),
+                          child: Text(
+                            System.data.strings!.login,
+                            style: TextStyle(
+                              color: System.data.color!.lightTextColor,
+                              fontSize: System.data.font!.xxxl,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: BasicComponent.avatar(
-              size: 100,
-              onTap: widget.onTapProfile,
-            ),
-          )
-        ],
+          ],
+        ),
       ),
     );
   }

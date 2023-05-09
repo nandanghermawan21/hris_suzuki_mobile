@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 abstract class Colour {
-  Color get background => const Color(0xFFF5F4F4);
+  Color get background => const Color(0xffe9ecef);
   Color get darkBackground => const Color.fromARGB(255, 0, 30, 89);
   Color get lightBackground => const Color(0xffF0F6FF);
   Color get darkBackgroundBorder => const Color(0xff707070);

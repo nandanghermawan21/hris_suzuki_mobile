@@ -40,8 +40,8 @@ class BasicComponent {
 
   static Widget logoHorizontal() {
     return Image.asset(
-      "assets/kogo_suzuki_mobile_survey_horizontal.png",
-      color: Colors.white,
+      "assets/logo_suzuki_red.png",
+      // color: Colors.white,
     );
   }
 }
