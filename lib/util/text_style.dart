@@ -46,4 +46,11 @@ class TextStyles {
         fontSize: System.data.font!.l,
         fontWeight: FontWeight.bold,
       );
+
+  TextStyle get headLine1 => TextStyle(
+        color: System.data.color!.lightTextColor,
+        fontFamily: System.data.font!.primary,
+        fontSize: System.data.font!.xxxl,
+        fontWeight: FontWeight.bold,
+      );
 }

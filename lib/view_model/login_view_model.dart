@@ -36,32 +36,36 @@ class LoginViewModel extends ChangeNotifier {
       System.data.global.token = value?.token ?? "";
       System.data.session!
           .setString(SessionKey.user, json.encode(value?.toJson()));
-      if (canAuhth == false) {
-        if (onLOginSuccess != null) {
-          onLOginSuccess();
-        }
-      } else {
-        if (user == null) {
-          LoginViewState.safeAccountWirhBio(
-            context: System.data.context,
-            onTapSave: () {
-              System.data.session!.setBool(SessionKey.userByBio, false);
-              safeAccount(onLOginSuccess!);
-            },
-            onTapNo: () {
-              if (onLOginSuccess != null) {
-                onLOginSuccess();
-              }
-            },
-          );
-        } else {
-          if (onLOginSuccess != null) {
-            onLOginSuccess();
-          }
-        }
+      if(onLOginSuccess != null) {
+        onLOginSuccess();
       }
+      // if (canAuhth == false) {
+      //   if (onLOginSuccess != null) {
+      //     onLOginSuccess();
+      //   }
+      // } else {
+      //   if (user == null) {
+      //     LoginViewState.safeAccountWirhBio(
+      //       context: System.data.context,
+      //       onTapSave: () {
+      //         System.data.session!.setBool(SessionKey.userByBio, false);
+      //         safeAccount(onLOginSuccess!);
+      //       },
+      //       onTapNo: () {
+      //         if (onLOginSuccess != null) {
+      //           onLOginSuccess();
+      //         }
+      //       },
+      //     );
+      //   } else {
+      //     if (onLOginSuccess != null) {
+      //       onLOginSuccess();
+      //     }
+      //   }
+      // }
     }).catchError(
       (onError) {
+        debugPrint("error $onError");
         loadingController.stopLoading(
           isError: true,
           message: ErrorHandlingUtil.handleApiError(onError),

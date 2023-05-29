@@ -173,4 +173,38 @@ class StringsIdId extends Strings {
 
   @override
   String get internetConnestionError => "Gagal terhubung ke jaringan internet";
+
+  @override
+  String get checkInCheckOutAttendance => "Check In/Out\nKehadiran";
+
+  @override
+  String get requestLeave => "Permohonan\nCuti";
+
+  @override
+  String get requestLemurs => "Permohonan\nLembur";
+
+  @override
+  String get salary => "Gaji";
+
+  @override
+  String get employee => "Karyawan";
+
+  @override
+  String get attendance => "Kehadiran";
+
+  @override
+  String get leave => "Cuti";
+
+  @override
+  String get lemurs => "Lembur";
+
+  @override
+  String get medical => "Kesehatan";
+
+  @override
+  String get loan => "Pinjaman";
+
+  @override
+  String get carrier => "Karir";
+
 }

@@ -85,4 +85,26 @@ abstract class Strings {
   String get no => "No";
 
   String get internetConnestionError => "Internet connection error";
+
+  String get checkInCheckOutAttendance => "Check in /out\nattendance";
+
+  String get requestLeave => "Request\nLeave";
+
+  String get requestLemurs => "Request\nLemurs";
+
+  String get salary => "Salary";
+
+  String get employee => "Employee";
+
+  String get attendance => "Attendance";
+
+  String get leave => "Leave";
+
+  String get lemurs => "Lemurs";
+
+  String get medical => "Medical";
+
+  String get loan => "Loan";
+
+  String get carrier => "Carrier";
 }

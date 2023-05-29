@@ -64,21 +64,10 @@ class Network {
     )
         .then(
       (http.Response response) {
-        try {
-          debugPrint("POST ${uri.toString()}");
-          debugPrint("body ${json.encode(body)}");
-          debugPrint("response ${response.body}");
-          return handleResponse(
-            response,
-            otpRequired: otpRequired,
-            unAuthorized: unAuthorized,
-          );
-        } catch (e) {
-          if (e is SocketException) {
-            throw SocketException(System.data.strings!.internetConnestionError);
-          } else {
-            rethrow;
-          }
+        if(response.statusCode == 200){
+          return json.decode(response.body);
+        }else{
+          throw response;
         }
       },
     ).catchError((e) {
