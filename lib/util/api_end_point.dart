@@ -8,6 +8,7 @@ class ApiEndPoint {
   String loginUrl = "auth/login";
   String checkInUrl = "attendance/checkin";
   String checkOutUrl = "attendance/checkout";
+  String pegawaiProfile = "pegawai/myprofile";
 
 
   String get url {

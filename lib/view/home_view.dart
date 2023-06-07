@@ -20,6 +20,11 @@ class HomeView extends StatefulWidget {
 class HomeViewState extends State<HomeView> {
   HomeViewModel viewModel = HomeViewModel();
 
+  @override
+  void initState(){
+    super.initState();
+  }
+
   List<MenuModel> shorMenu(BuildContext context) {
     return <MenuModel>[
       MenuModel(
