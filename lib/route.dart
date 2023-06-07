@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:suzuki/util/enum.dart';
+import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view/splash_screen_view.dart';
 import 'package:suzuki/view/login_view.dart';
 import 'package:suzuki/view/home_view.dart';
+import 'package:suzuki/view/setting_view.dart';
 
 String initialRouteName = RouteName.splashScreen;
 
@@ -9,6 +12,7 @@ class RouteName {
   static const String splashScreen = "splashScreen";
   static const String login = "login";
   static const String home = "home";
+  static const String setting = "setting";
 }
 
 enum ParamName {
@@ -40,7 +44,19 @@ Map<String, WidgetBuilder> route = {
   },
   RouteName.home: (BuildContext context) {
     return HomeView(
-      key: GlobalKey(),
+      onTapSetting: (){
+        Navigator.of(context).pushNamed(RouteName.setting);
+      },
+    );
+  },
+  RouteName.setting: (BuildContext context) {
+    return SettingView(
+      onTapLogout: (){
+        System.data.global.user = null;
+        System.data.global.token = null;
+        System.data.session!.setString(SessionKey.user, "{}");
+        Navigator.of(context).pushNamedAndRemoveUntil(RouteName.login, (route) => route.settings.name == "");
+      },
     );
   },
 };

@@ -107,4 +107,10 @@ abstract class Strings {
   String get loan => "Loan";
 
   String get carrier => "Carrier";
+
+  String get invalidLocationOnAddress => "Invalid location on address";
+
+  String get sessionExpirePleaseReLogin => "Session expire, please re-login";
+
+  String get setting => "Setting";
 }

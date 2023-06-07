@@ -207,4 +207,13 @@ class StringsIdId extends Strings {
   @override
   String get carrier => "Karir";
 
+  @override
+  String get invalidLocationOnAddress => "Lokasi tidak valid pada alamat";
+
+  @override
+  String get sessionExpirePleaseReLogin => "Sesi telah habis, silahkan login kembali";
+
+  @override
+  String get setting => "Pengaturan";
+
 }

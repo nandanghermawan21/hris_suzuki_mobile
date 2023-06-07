@@ -6,6 +6,8 @@ class ApiEndPoint {
   String webSocketUrl = "";
   String webSocketUrlDebug = "";
   String loginUrl = "auth/login";
+  String checkInUrl = "attendance/checkin";
+  String checkOutUrl = "attendance/checkout";
 
 
   String get url {

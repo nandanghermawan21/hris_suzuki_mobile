@@ -64,9 +64,9 @@ class Network {
     )
         .then(
       (http.Response response) {
-        if(response.statusCode == 200){
+        if (response.statusCode == 200) {
           return json.decode(response.body);
-        }else{
+        } else {
           throw response;
         }
       },

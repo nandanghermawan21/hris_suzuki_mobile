@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:suzuki/util/basic_response.dart';
 import 'package:suzuki/util/mode_util.dart';
+import 'package:suzuki/util/system.dart';
 
 class ErrorHandlingUtil {
   static handleApiError(
@@ -17,7 +18,13 @@ class ErrorHandlingUtil {
     } else if (error is FormatException) {
       _message = error.toString();
     } else if (error is http.Response) {
-      _message = error.body;
+      switch (error.statusCode) {
+        case 401:
+          _message = System.data.strings!.sessionExpirePleaseReLogin;
+          break;
+        default:
+          _message = error.body;
+      }
     } else {
       _message = error.toString();
     }

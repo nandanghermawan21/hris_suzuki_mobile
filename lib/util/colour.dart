@@ -15,4 +15,6 @@ abstract class Colour {
   Color get dangerColor => const Color(0XFFDB5065);
   Color get infoColor => const Color(0XFF17A383);
   Color get warningColor => const Color.fromARGB(255, 255, 204, 0);
+  Color get greyColor => const Color.fromARGB(255, 160, 158, 158);
+
 }
