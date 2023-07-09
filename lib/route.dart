@@ -54,7 +54,7 @@ Map<String, WidgetBuilder> route = {
       onTapLogout: (){
         System.data.global.user = null;
         System.data.global.token = null;
-        System.data.session!.setString(SessionKey.user, "{}");
+        System.data.session!.setString(SessionKey.user, "");
         Navigator.of(context).pushNamedAndRemoveUntil(RouteName.login, (route) => route.settings.name == "");
       },
     );
