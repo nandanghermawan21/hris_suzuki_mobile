@@ -18,7 +18,8 @@ class Network {
     ValueChanged<BasicResponse>? unAuthorized,
   }) {
     DateTime timeStamp = DateTime.now();
-
+    debugPrint("url $url");
+    debugPrint("body $body");
     Map<String, String> newHeaders = headers ?? {};
 
     newHeaders.addAll(
@@ -165,7 +166,6 @@ class Network {
           throw response;
       }
     } else {
-      debugPrint('masuk sini');
       BasicResponse basicResponse = BasicResponse.fromJson(json.decode(res));
       if (!BasicResponseStatus.successCodes.contains(basicResponse.status)) {
         switch (basicResponse.status) {

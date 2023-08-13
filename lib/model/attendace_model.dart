@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:suzuki/util/geolocator_util.dart';
 import 'package:suzuki/util/network.dart';
 import 'package:suzuki/util/system.dart';
@@ -31,7 +32,7 @@ class AttendaceModel {
       idLokasiFisik: json['id_lokasi_fisik'],
       lat: json['lat'],
       lon: json['lon'],
-      createdDate: DateTime.parse(json['created_date']) ,
+      createdDate: DateTime.parse(json['created_date']),
       createdBy: json['created_by'],
     );
   }
@@ -80,7 +81,7 @@ class AttendaceModel {
     });
   }
 
-   static Future<AttendaceModel> checkOut({
+  static Future<AttendaceModel> checkOut({
     String? token,
   }) {
     return GeolocatorUtil.myLocation().then((value) {

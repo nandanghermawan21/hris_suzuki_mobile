@@ -21,7 +21,7 @@ class HomeViewModel extends ChangeNotifier {
     }).catchError((e) {
       circularLoaderController.stopLoading(
         isError: true,
-        message: "Check In Failed \n" + (ErrorHandlingUtil.handleApiError(e)),
+        message: ErrorHandlingUtil.handleApiError(e),
       );
     });
   }

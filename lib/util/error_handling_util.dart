@@ -12,7 +12,6 @@ class ErrorHandlingUtil {
     String? onTimeOut = "",
   }) {
     String _message = "";
-
     if (error is BasicResponse) {
       _message = error.message ?? "";
     } else if (error is FormatException) {
