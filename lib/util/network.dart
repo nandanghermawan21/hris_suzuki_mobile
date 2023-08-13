@@ -132,20 +132,10 @@ class Network {
     )
         .then(
       (http.Response response) {
-        debugPrint("GET ${uri.toString()}");
-        debugPrint("response ${response.body}");
-        try {
-          return handleResponse(
-            response,
-            otpRequired: otpRequired,
-            unAuthorized: unAuthorized,
-          );
-        } catch (e) {
-          if (e is SocketException) {
-            throw SocketException(System.data.strings!.internetConnestionError);
-          } else {
-            rethrow;
-          }
+        if (response.statusCode == 200) {
+          return json.decode(response.body);
+        } else {
+          throw response;
         }
       },
     ).catchError((e) {
@@ -175,6 +165,7 @@ class Network {
           throw response;
       }
     } else {
+      debugPrint('masuk sini');
       BasicResponse basicResponse = BasicResponse.fromJson(json.decode(res));
       if (!BasicResponseStatus.successCodes.contains(basicResponse.status)) {
         switch (basicResponse.status) {

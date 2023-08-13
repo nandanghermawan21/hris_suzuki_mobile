@@ -84,10 +84,8 @@ class LoginViewState extends State<LoginView> {
                                   ? GestureDetector(
                                       onTap: () {
                                         if (Platform.isIOS) {
-                                          loginViewModel
-                                              .retrieveSecretOnLocker(
-                                                  widget.onLoginSuccess ??
-                                                      () {});
+                                          loginViewModel.retrieveSecretOnLocker(
+                                              widget.onLoginSuccess ?? () {});
                                         } else {
                                           if (loginViewModel.canBio) {
                                             loginViewModel
@@ -126,13 +124,11 @@ class LoginViewState extends State<LoginView> {
                             children: [
                               Text(
                                 "Versi : ",
-                                style:
-                                    System.data.textStyles!.basicLabel,
+                                style: System.data.textStyles!.basicLabel,
                               ),
                               Text(
                                 System.data.versionName,
-                                style:
-                                    System.data.textStyles!.basicLabel,
+                                style: System.data.textStyles!.basicLabel,
                               ),
                             ],
                           ),
@@ -142,13 +138,11 @@ class LoginViewState extends State<LoginView> {
                             children: [
                               Text(
                                 "Model : ",
-                                style:
-                                    System.data.textStyles!.basicLabel,
+                                style: System.data.textStyles!.basicLabel,
                               ),
                               Text(
                                 System.data.deviceInfo?.deviceModel ?? "",
-                                style:
-                                    System.data.textStyles!.basicLabel,
+                                style: System.data.textStyles!.basicLabel,
                               ),
                             ],
                           ),
@@ -158,13 +152,11 @@ class LoginViewState extends State<LoginView> {
                             children: [
                               Text(
                                 "DeviceId : ",
-                                style:
-                                    System.data.textStyles!.basicLabel,
+                                style: System.data.textStyles!.basicLabel,
                               ),
                               Text(
                                 System.data.deviceInfo?.deviceId ?? "",
-                                style:
-                                    System.data.textStyles!.basicLabel,
+                                style: System.data.textStyles!.basicLabel,
                               ),
                               const SizedBox(
                                 width: 5,
@@ -172,8 +164,8 @@ class LoginViewState extends State<LoginView> {
                               GestureDetector(
                                 onTap: () {
                                   Clipboard.setData(ClipboardData(
-                                          text: System
-                                              .data.deviceInfo?.deviceId))
+                                          text:
+                                              System.data.deviceInfo?.deviceId))
                                       .then((value) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
@@ -229,15 +221,13 @@ class LoginViewState extends State<LoginView> {
                   margin: const EdgeInsets.only(left: 20, right: 20),
                   padding: const EdgeInsets.only(
                       top: 15, bottom: 15, left: 25, right: 25),
-                  decoration:  BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      top: BorderSide(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                          top: BorderSide(
                         color: System.data.color!.primaryColor,
                         width: 5,
-                      )
-                    )
-                  ),
+                      ))),
                   child: Column(
                     children: [
                       RichText(

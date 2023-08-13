@@ -30,7 +30,7 @@ class TextStyles {
   TextStyle get boldTitleLightLabel => TextStyle(
         color: System.data.color!.lightTextColor,
         fontFamily: System.data.font!.primary,
-        fontSize: System.data.font!.l,
+        fontSize: System.data.font!.xxxl,
         fontWeight: FontWeight.bold,
       );
   TextStyle get boldTitleInfoLabel => TextStyle(

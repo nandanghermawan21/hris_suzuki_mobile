@@ -36,7 +36,8 @@ class LoginViewModel extends ChangeNotifier {
       System.data.global.token = value?.token ?? "";
       System.data.session!
           .setString(SessionKey.user, json.encode(value?.toJson()));
-      if(onLOginSuccess != null) {
+      System.data.global.user = value;
+      if (onLOginSuccess != null) {
         onLOginSuccess();
       }
       // if (canAuhth == false) {

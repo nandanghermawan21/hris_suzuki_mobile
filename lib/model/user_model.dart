@@ -2,55 +2,53 @@ import 'package:suzuki/util/network.dart';
 import 'package:suzuki/util/system.dart';
 
 class UserModel {
-  int? id; //": 1,
-  String? username; //": "root",
-  String?
-      password; //": "$2y$10$SfiR42Y913qnwKO4ayVvVO5ufwkDTL2G3.5Kw2GJS.2TpHycQOnTq",
-  String? name; //": "admin",
-  String? alamat; //": "INA",
-  String? nohp; //": "085",
-  String? email; //": "admin@root.com",
-  int? organitationId; //": null,
-  String?
-      token; ////": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NTUwNTE4NTgsImV4cCI6MTY5ODI1MTg1OCwidWlkIjoicm9vdCJ9.EPVtaxF0ntlAOkpnSvNMFKK-QIdSkR-53AGjsB4CQGo"
+  int? idUser;
+  int? idUserLevel;
+  int? idPegawai;
+  String? nama;
+  String? email;
+  String? username;
+  String? password;
+  String? token;
+  String? isAktif;
 
   UserModel({
-    this.id,
+    this.idUser,
+    this.idUserLevel,
+    this.idPegawai,
+    this.nama,
+    this.email,
     this.username,
     this.password,
-    this.name,
-    this.alamat,
-    this.nohp,
-    this.email,
-    this.organitationId,
     this.token,
+    this.isAktif,
   });
 
-  static UserModel fromJson(Map<String, dynamic> json) {
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: (json["id"] as num?)?.toInt(),
-      username: (json["username"] as String?),
-      password: (json["password"] as String?),
-      name: (json["name"] as String?),
-      alamat: (json["alamat"] as String?),
-      nohp: (json["nohp"] as String?),
-      email: (json["email"] as String?),
-      organitationId: (json["organitation_id"] as num?)?.toInt(),
-      token: (json["token"] as String?),
+      idUser: json["id_user"] as int?,
+      idUserLevel: json["id_user_level"] as int?,
+      idPegawai: json["id_pegawai"] as int?,
+      nama: json["nama"] as String?,
+      email: json["email"] as String?,
+      username: json["username"] as String?,
+      password: json["password"] as String?,
+      token: json["token"] as String?,
+      isAktif: json["is_aktif"] as String?,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
+      "id_user": idUser,
+      "id_user_level": idUserLevel,
+      "id_pegawai": idPegawai,
+      "nama": nama,
+      "email": email,
       "username": username,
       "password": password,
-      "name": name,
-      "alamat": alamat,
-      "nohp": nohp,
-      "email": email,
-      "organitation_id": organitationId,
       "token": token,
+      "is_aktif": isAktif,
     };
   }
 

@@ -2,14 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/model/menu_model.dart';
+import 'package:suzuki/util/data.dart';
 import 'package:suzuki/util/sized_util.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view_model/home_view_model.dart';
 
 class HomeView extends StatefulWidget {
   final VoidCallback? onTapSetting;
+  final VoidCallback? onTapProfile;
 
-  const HomeView({Key? key, this.onTapSetting}) : super(key: key);
+  const HomeView({
+    Key? key,
+    this.onTapSetting,
+    this.onTapProfile,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -21,8 +27,9 @@ class HomeViewState extends State<HomeView> {
   HomeViewModel viewModel = HomeViewModel();
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    viewModel.getMyprofile();
   }
 
   List<MenuModel> shorMenu(BuildContext context) {
@@ -90,46 +97,46 @@ class HomeViewState extends State<HomeView> {
         iconColor: Colors.white,
         onTap: () {},
       ),
-      MenuModel(
-        title: System.data.strings!.employee,
-        icon: Icons.people,
-        iconBackgroundColor: const Color.fromARGB(255, 19, 98, 21),
-        backgroundColor: Colors.white,
-        iconColor: Colors.white,
-        onTap: () {},
-      ),
-      MenuModel(
-        title: System.data.strings!.medical,
-        icon: Icons.medical_information,
-        iconBackgroundColor: Colors.pink,
-        backgroundColor: Colors.white,
-        iconColor: Colors.white,
-        onTap: () {},
-      ),
-      MenuModel(
-        title: System.data.strings!.loan,
-        icon: Icons.money,
-        iconBackgroundColor: const Color.fromARGB(255, 75, 93, 231),
-        backgroundColor: Colors.white,
-        iconColor: Colors.white,
-        onTap: () {},
-      ),
-      MenuModel(
-        title: "PFTK",
-        icon: Icons.person_pin_outlined,
-        iconBackgroundColor: const Color.fromARGB(255, 89, 8, 94),
-        backgroundColor: Colors.white,
-        iconColor: Colors.white,
-        onTap: () {},
-      ),
-      MenuModel(
-        title: System.data.strings!.carrier,
-        icon: Icons.line_axis,
-        iconBackgroundColor: const Color.fromARGB(255, 36, 159, 100),
-        backgroundColor: Colors.white,
-        iconColor: Colors.white,
-        onTap: () {},
-      ),
+      // MenuModel(
+      //   title: System.data.strings!.employee,
+      //   icon: Icons.people,
+      //   iconBackgroundColor: const Color.fromARGB(255, 19, 98, 21),
+      //   backgroundColor: Colors.white,
+      //   iconColor: Colors.white,
+      //   onTap: () {},
+      // ),
+      // MenuModel(
+      //   title: System.data.strings!.medical,
+      //   icon: Icons.medical_information,
+      //   iconBackgroundColor: Colors.pink,
+      //   backgroundColor: Colors.white,
+      //   iconColor: Colors.white,
+      //   onTap: () {},
+      // ),
+      // MenuModel(
+      //   title: System.data.strings!.loan,
+      //   icon: Icons.money,
+      //   iconBackgroundColor: const Color.fromARGB(255, 75, 93, 231),
+      //   backgroundColor: Colors.white,
+      //   iconColor: Colors.white,
+      //   onTap: () {},
+      // ),
+      // MenuModel(
+      //   title: "PFTK",
+      //   icon: Icons.person_pin_outlined,
+      //   iconBackgroundColor: const Color.fromARGB(255, 89, 8, 94),
+      //   backgroundColor: Colors.white,
+      //   iconColor: Colors.white,
+      //   onTap: () {},
+      // ),
+      // MenuModel(
+      //   title: System.data.strings!.carrier,
+      //   icon: Icons.line_axis,
+      //   iconBackgroundColor: const Color.fromARGB(255, 36, 159, 100),
+      //   backgroundColor: Colors.white,
+      //   iconColor: Colors.white,
+      //   onTap: () {},
+      // ),
     ];
   }
 
@@ -156,11 +163,17 @@ class HomeViewState extends State<HomeView> {
                             bottom: false,
                             child: Stack(
                               children: [
-                                Column(
-                                  children: [
-                                    avatar(),
-                                    accountInfo(),
-                                  ],
+                                Container(
+                                  width: double.infinity,
+                                  color: Colors.transparent,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      avatar(),
+                                      accountInfo(),
+                                    ],
+                                  ),
                                 ),
                                 Align(
                                   alignment: Alignment.topRight,
@@ -264,13 +277,27 @@ class HomeViewState extends State<HomeView> {
   Widget avatar() {
     return SizedBox(
       height: 120,
-      child: CircleAvatar(
-        backgroundColor: Colors.white,
-        radius: 40,
-        child: Icon(
-          Icons.person,
-          color: System.data.color!.primaryColor,
-          size: 40,
+      child: GestureDetector(
+        onTap: () {
+          widget.onTapProfile!();
+        },
+        child: Consumer<Data>(
+          builder: (c, d, w) {
+            return CircleAvatar(
+              backgroundColor: Colors.white,
+              radius: 40,
+              foregroundImage: System.data.global.myProfile?.filePhoto != null
+                  ? NetworkImage(
+                      System.data.global.myProfile?.filePhoto ?? "",
+                    )
+                  : null,
+              child: Icon(
+                Icons.person,
+                color: System.data.color!.primaryColor,
+                size: 40,
+              ),
+            );
+          },
         ),
       ),
     );
@@ -278,7 +305,8 @@ class HomeViewState extends State<HomeView> {
 
   Widget accountInfo() {
     return Expanded(
-      child: SizedBox(
+      child: Container(
+        color: Colors.transparent,
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -287,7 +315,8 @@ class HomeViewState extends State<HomeView> {
               height: 35,
               child: FittedBox(
                 child: Text(
-                  "William Smith",
+                  System.data.global.user?.nama ??
+                      System.data.strings!.employeName,
                   style: System.data.textStyles!.headLine1,
                 ),
               ),
@@ -299,11 +328,15 @@ class HomeViewState extends State<HomeView> {
               width: double.infinity,
               height: 20,
               child: FittedBox(
-                child: Text(
-                  "Human Resources",
-                  style: System.data.textStyles!.headLine1.copyWith(
-                    fontWeight: FontWeight.normal,
-                  ),
+                child: Consumer<Data>(
+                  builder: (c, d, w) {
+                    return Text(
+                      System.data.global.myProfile?.namaJabatan ?? "",
+                      style: System.data.textStyles!.headLine1.copyWith(
+                        fontWeight: FontWeight.normal,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

@@ -113,4 +113,8 @@ abstract class Strings {
   String get sessionExpirePleaseReLogin => "Session expire, please re-login";
 
   String get setting => "Setting";
+
+  String get profile => "Profile";
+
+  String get employeName => "Employee Name";
 }

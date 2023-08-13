@@ -211,9 +211,12 @@ class StringsIdId extends Strings {
   String get invalidLocationOnAddress => "Lokasi tidak valid pada alamat";
 
   @override
-  String get sessionExpirePleaseReLogin => "Sesi telah habis, silahkan login kembali";
+  String get sessionExpirePleaseReLogin =>
+      "Sesi telah habis, silahkan login kembali";
 
   @override
   String get setting => "Pengaturan";
 
+  @override
+  String get employeName => "Nama Karyawan";
 }

@@ -8,7 +8,6 @@ import 'package:suzuki/util/system.dart';
 class HomeViewModel extends ChangeNotifier {
   CircularLoaderController circularLoaderController =
       CircularLoaderController();
-  PegawaiModel myProfile = PegawaiModel();
 
   void checkIn() {
     circularLoaderController.startLoading(message: "Check In...");
@@ -44,16 +43,19 @@ class HomeViewModel extends ChangeNotifier {
     });
   }
 
-  void getMyprofile(){
+  void getMyprofile() {
+    circularLoaderController.startLoading();
     PegawaiModel.myProfile(
       token: System.data.global.token,
     ).then((value) {
-       myProfile = value;
-       commit();
-    }).catchError((onError){
+      circularLoaderController.forceStop();
+      System.data.global.myProfile = value;
+      System.data.commit();
+    }).catchError((onError) {
       circularLoaderController.stopLoading(
         isError: true,
-        message: "Get Profile Failed \n" + (ErrorHandlingUtil.handleApiError(onError)),
+        message: "Get Profile Failed \n" +
+            (ErrorHandlingUtil.handleApiError(onError)),
       );
     });
   }
