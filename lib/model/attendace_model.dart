@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:suzuki/util/geolocator_util.dart';
 import 'package:suzuki/util/network.dart';
 import 'package:suzuki/util/system.dart';
