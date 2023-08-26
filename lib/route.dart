@@ -6,6 +6,7 @@ import 'package:suzuki/view/login_view.dart';
 import 'package:suzuki/view/home_view.dart';
 import 'package:suzuki/view/setting_view.dart';
 import 'package:suzuki/view/profile_view.dart';
+import 'package:suzuki/view/cuti_view.dart';
 
 String initialRouteName = RouteName.splashScreen;
 
@@ -15,6 +16,7 @@ class RouteName {
   static const String home = "home";
   static const String setting = "setting";
   static const String profile = "profile";
+  static const String cuti = "leave";
 }
 
 enum ParamName {
@@ -52,6 +54,9 @@ Map<String, WidgetBuilder> route = {
       onTapProfile: () {
         Navigator.of(context).pushNamed(RouteName.profile);
       },
+      onTapLeave: (){
+        Navigator.of(context).pushNamed(RouteName.cuti);
+      },
     );
   },
   RouteName.setting: (BuildContext context) {
@@ -69,5 +74,8 @@ Map<String, WidgetBuilder> route = {
     return ProfileView(
       key: GlobalKey(),
     );
+  },
+  RouteName.cuti: (BuildContext context) {
+    return const CutiView();
   },
 };

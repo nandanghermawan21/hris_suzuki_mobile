@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ import 'package:uni_links/uni_links.dart';
 Data data = Data();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  initializeDateFormatting();
   HttpOverrides.global = MyHttpOverrides();
   setting();
   data.initialize().then((val) async {
@@ -36,7 +38,6 @@ Future<void> getPermission() async {
     });
   }
 }
-
 
 void onIosBackground() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,8 +62,7 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
     if (!mounted) return;
     handleInitialDeepLink();
     handleDeeplink();
-    getPermission().then((value) {
-    });
+    getPermission().then((value) {});
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -101,14 +101,15 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget home() {
     return WillPopScope(
       onWillPop: () {
-        return Future.value().then((value) {
-          if (ModalRoute.of(System.data.navigatorKey.currentContext!)?.canPop ==
-              true) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+        return Future.value(true);
+        // return Future.value().then((value) {
+        //   if (ModalRoute.of(System.data.navigatorKey.currentContext!)?.canPop ==
+        //       true) {
+        //     return true;
+        //   } else {
+        //     return false;
+        //   }
+        // });
       },
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

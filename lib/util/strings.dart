@@ -117,4 +117,8 @@ abstract class Strings {
   String get profile => "Profile";
 
   String get employeName => "Employee Name";
+
+  String get myLeave => "My Leave";
+
+  String get needApproval => "Need Approval";
 }

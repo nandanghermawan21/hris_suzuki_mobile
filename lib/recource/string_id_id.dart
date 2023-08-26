@@ -219,4 +219,10 @@ class StringsIdId extends Strings {
 
   @override
   String get employeName => "Nama Karyawan";
+
+  @override
+  String get myLeave => "Cuti Saya";
+
+  @override
+  String get needApproval => "Butuh Persetujuan";
 }

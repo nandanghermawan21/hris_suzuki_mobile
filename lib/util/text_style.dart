@@ -48,9 +48,23 @@ class TextStyles {
       );
 
   TextStyle get headLine1 => TextStyle(
-        color: System.data.color!.lightTextColor,
+        color: System.data.color!.darkTextColor,
         fontFamily: System.data.font!.primary,
         fontSize: System.data.font!.xxxl,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get headLine2 => TextStyle(
+        color: System.data.color!.darkTextColor,
+        fontFamily: System.data.font!.primary,
+        fontSize: System.data.font!.xxl,
+        fontWeight: FontWeight.normal,
+      );
+
+  TextStyle get headLine3 => TextStyle(
+        color: System.data.color!.darkTextColor,
+        fontFamily: System.data.font!.primary,
+        fontSize: System.data.font!.xl,
+        fontWeight: FontWeight.normal,
       );
 }

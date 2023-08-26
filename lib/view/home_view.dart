@@ -10,11 +10,13 @@ import 'package:suzuki/view_model/home_view_model.dart';
 class HomeView extends StatefulWidget {
   final VoidCallback? onTapSetting;
   final VoidCallback? onTapProfile;
+  final VoidCallback? onTapLeave;
 
   const HomeView({
     Key? key,
     this.onTapSetting,
     this.onTapProfile,
+    this.onTapLeave
   }) : super(key: key);
 
   @override
@@ -71,7 +73,9 @@ class HomeViewState extends State<HomeView> {
         iconBackgroundColor: Colors.purple,
         backgroundColor: Colors.white,
         iconColor: Colors.white,
-        onTap: () {},
+        onTap: () {
+          widget.onTapLeave!();
+        },
       ),
       MenuModel(
         title: System.data.strings!.attendance,
@@ -209,57 +213,62 @@ class HomeViewState extends State<HomeView> {
                     children: List.generate(
                       mainMenu.length,
                       (index) {
-                        return Container(
-                          width: 90,
-                          height: 100,
-                          margin: const EdgeInsets.all(12),
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(5),
+                        return GestureDetector(
+                          onTap: (){
+                            mainMenu[index].onTap!();
+                          },
+                          child: Container(
+                            width: 90,
+                            height: 100,
+                            margin: const EdgeInsets.all(12),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 0,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
                             ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 0,
-                                blurRadius: 5,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: CircleAvatar(
-                                  backgroundColor:
-                                      mainMenu[index].iconBackgroundColor,
-                                  child: Icon(
-                                    mainMenu[index].icon,
-                                    color: Colors.white,
-                                    size: 30,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Expanded(
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    mainMenu[index].title ?? "",
-                                    style: System.data.textStyles!.basicLabel
-                                        .copyWith(
-                                      fontSize: 16,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: 50,
+                                  width: 50,
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        mainMenu[index].iconBackgroundColor,
+                                    child: Icon(
+                                      mainMenu[index].icon,
+                                      color: Colors.white,
+                                      size: 30,
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
                                 ),
-                              )
-                            ],
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Expanded(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      mainMenu[index].title ?? "",
+                                      style: System.data.textStyles!.basicLabel
+                                          .copyWith(
+                                        fontSize: 16,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       },
