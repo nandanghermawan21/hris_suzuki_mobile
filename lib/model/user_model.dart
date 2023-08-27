@@ -65,6 +65,10 @@ class UserModel {
         "username": username ?? "",
         "password": password ?? "",
       },
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Device-Id": System.data.deviceInfo?.deviceId ?? "",
+      },
     ).then((value) {
       return value == null ? null : UserModel.fromJson((value));
     }).catchError(

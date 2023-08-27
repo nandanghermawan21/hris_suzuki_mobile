@@ -59,6 +59,9 @@ Map<String, WidgetBuilder> route = {
       onTapLeave: (){
         Navigator.of(context).pushNamed(RouteName.cuti);
       },
+      onTapCreateLeave: (){
+        Navigator.of(context).pushNamed(RouteName.formCuti);
+      },
     );
   },
   RouteName.setting: (BuildContext context) {

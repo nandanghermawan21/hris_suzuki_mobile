@@ -11,12 +11,14 @@ class HomeView extends StatefulWidget {
   final VoidCallback? onTapSetting;
   final VoidCallback? onTapProfile;
   final VoidCallback? onTapLeave;
+  final VoidCallback? onTapCreateLeave;
 
   const HomeView({
     Key? key,
     this.onTapSetting,
     this.onTapProfile,
-    this.onTapLeave
+    this.onTapLeave,
+    this.onTapCreateLeave,
   }) : super(key: key);
 
   @override
@@ -52,7 +54,9 @@ class HomeViewState extends State<HomeView> {
         iconBackgroundColor: Colors.green,
         backgroundColor: Colors.white,
         iconColor: Colors.white,
-        onTap: () {},
+        onTap: () {
+          widget.onTapCreateLeave!();
+        },
       ),
       MenuModel(
         title: System.data.strings!.requestLemurs,
