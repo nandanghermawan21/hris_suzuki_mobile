@@ -7,7 +7,9 @@ import 'package:suzuki/model/jatah_cuti_model.dart';
 import 'package:suzuki/util/system.dart';
 
 class CutiView extends StatefulWidget {
-  const CutiView({Key? key}) : super(key: key);
+  final VoidCallback onTapBuatCuti;
+
+  const CutiView({Key? key, required this.onTapBuatCuti}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -83,7 +85,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                         child: FloatingActionButton(
                           backgroundColor: System.data.color!.primaryColor,
                           onPressed: () {
-                            Navigator.pushNamed(context, "/cuti/add");
+                             widget.onTapBuatCuti();
                           },
                           child: const Icon(Icons.add),
                         ),

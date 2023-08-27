@@ -72,8 +72,8 @@ class JatahCutiModel {
         idPegawai: 1,
         namaPegawai: "Andry",
         namaTipeCuti: "Tahun Ini",
-        jumlahCuti: 3,
-        sisaCuti: 3,
+        jumlahCuti: 12,
+        sisaCuti: 12,
         tangalKadalaursa: DateTime(2024, 6, 30),
         warnaCuti: Colors.green.shade900
       ),
@@ -83,8 +83,8 @@ class JatahCutiModel {
         idPegawai: 1,
         namaPegawai: "Andry",
         namaTipeCuti: "Cuti Training & Pelatihan",
-        jumlahCuti: 12,
-        sisaCuti: 12,
+        jumlahCuti: 10,
+        sisaCuti: 8,
         tangalKadalaursa: DateTime(2024, 6, 30),
         warnaCuti: const Color.fromARGB(224, 6, 47, 107)
       ),

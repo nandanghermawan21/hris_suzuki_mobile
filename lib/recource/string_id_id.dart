@@ -225,4 +225,22 @@ class StringsIdId extends Strings {
 
   @override
   String get needApproval => "Butuh Persetujuan";
+
+  @override
+  String get formLeave => "Formulir Cuti";
+
+  @override
+  String get position => "Jabatan";
+
+  @override
+  String get leaveType => "Tipe Cuti";
+
+  @override
+  String get leaveDate => "Tanggal Cuti";
+
+  @override
+  String get leaveReason => "Alasan Cuti";
+
+  @override
+  String get submit => "Kirim";
 }

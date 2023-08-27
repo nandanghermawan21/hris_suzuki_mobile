@@ -121,4 +121,16 @@ abstract class Strings {
   String get myLeave => "My Leave";
 
   String get needApproval => "Need Approval";
+
+  String get formLeave => "Form Leave";
+
+  String get position => "Position";
+
+  String get leaveType => "Leave Type";
+
+  String get leaveDate => "Leave Date";
+
+  String get leaveReason => "Leave Reason";
+
+  String get submit => "Submit";
 }

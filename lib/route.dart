@@ -7,6 +7,7 @@ import 'package:suzuki/view/home_view.dart';
 import 'package:suzuki/view/setting_view.dart';
 import 'package:suzuki/view/profile_view.dart';
 import 'package:suzuki/view/cuti_view.dart';
+import 'package:suzuki/view/form_cuti_view.dart';
 
 String initialRouteName = RouteName.splashScreen;
 
@@ -17,6 +18,7 @@ class RouteName {
   static const String setting = "setting";
   static const String profile = "profile";
   static const String cuti = "leave";
+  static const String formCuti = "formLeave";
 }
 
 enum ParamName {
@@ -76,6 +78,13 @@ Map<String, WidgetBuilder> route = {
     );
   },
   RouteName.cuti: (BuildContext context) {
-    return const CutiView();
+    return CutiView(
+      onTapBuatCuti: (){
+        Navigator.of(context).pushNamed(RouteName.formCuti);
+      },
+    );
+  },
+  RouteName.formCuti: (BuildContext context) {
+    return const FormCutiView();
   },
 };
