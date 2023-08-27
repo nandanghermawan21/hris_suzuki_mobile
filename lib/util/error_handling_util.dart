@@ -31,7 +31,7 @@ class ErrorHandlingUtil {
     _message = "$prefix $_message";
 
     ModeUtil.debugPrint("error $prefix $_message");
-    return _message;
+    return _message.replaceAll('"', "");
   }
 
   static String readMessage(http.Response response) {

@@ -67,6 +67,7 @@ class AttendaceModel {
               HttpHeaders.acceptHeader: "application/json",
               HttpHeaders.contentTypeHeader: "application/json",
               HttpHeaders.authorizationHeader: "Bearer $token",
+              "Device-Id": System.data.deviceInfo?.deviceId ?? "",
             }).then((attemdamce) {
           return AttendaceModel.fromJson(attemdamce);
         }).catchError((onError) {
@@ -99,6 +100,7 @@ class AttendaceModel {
               HttpHeaders.acceptHeader: "application/json",
               HttpHeaders.contentTypeHeader: "application/json",
               HttpHeaders.authorizationHeader: "Bearer $token",
+              "Device-Id": System.data.deviceInfo?.deviceId ?? "",
             }).then((attemdamce) {
           return AttendaceModel.fromJson(attemdamce);
         }).catchError((onError) {
