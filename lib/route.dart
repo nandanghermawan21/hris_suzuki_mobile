@@ -8,6 +8,7 @@ import 'package:suzuki/view/setting_view.dart';
 import 'package:suzuki/view/profile_view.dart';
 import 'package:suzuki/view/cuti_view.dart';
 import 'package:suzuki/view/form_cuti_view.dart';
+import 'package:suzuki/view/absensi_view.dart';
 
 String initialRouteName = RouteName.splashScreen;
 
@@ -19,6 +20,7 @@ class RouteName {
   static const String profile = "profile";
   static const String cuti = "leave";
   static const String formCuti = "formLeave";
+  static const String absensi = "absensi";
 }
 
 enum ParamName {
@@ -62,6 +64,9 @@ Map<String, WidgetBuilder> route = {
       onTapCreateLeave: (){
         Navigator.of(context).pushNamed(RouteName.formCuti);
       },
+      onTapAttendance: (){
+        Navigator.of(context).pushNamed(RouteName.absensi);
+      },
     );
   },
   RouteName.setting: (BuildContext context) {
@@ -89,5 +94,8 @@ Map<String, WidgetBuilder> route = {
   },
   RouteName.formCuti: (BuildContext context) {
     return const FormCutiView();
+  },
+  RouteName.absensi: (BuildContext context) {
+    return const AbsensiView();
   },
 };
