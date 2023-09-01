@@ -8,19 +8,37 @@ class AttendaceModel {
   int? idPegawai; //	integer
   int? idAttendance; //	integer
   int? idLokasiFisik; //	integer
+  String? codeAttendance;
   double? lat; //	number($double)
   double? lon; //	number($double)
+  String? address; //	string
   DateTime? createdDate; //	string
   int? createdBy;
+  bool? approvalStatus;
+  String? approvalReason;
+  String? approvedBy;
+  String? approvedByName;
+  String? approvedByJabatan;
+  DateTime? approvedDate;
+
+
 
   AttendaceModel({
     this.idPegawai,
     this.idAttendance,
+    this.codeAttendance,
     this.idLokasiFisik,
     this.lat,
     this.lon,
+    this.address,
     this.createdDate,
     this.createdBy,
+    this.approvalStatus,
+    this.approvalReason,
+    this.approvedBy,
+    this.approvedDate,
+    this.approvedByName,
+    this.approvedByJabatan,
   }); //	string
 
   //crete from json app
@@ -28,11 +46,19 @@ class AttendaceModel {
     return AttendaceModel(
       idPegawai: json['id_pegawai'],
       idAttendance: json['id_attendance'],
+      codeAttendance: json['code_attendance'],
       idLokasiFisik: json['id_lokasi_fisik'],
       lat: json['lat'],
       lon: json['lon'],
+      address: json['address'],
       createdDate: DateTime.parse(json['created_date']),
       createdBy: json['created_by'],
+      approvalStatus: json['approval_status'],
+      approvalReason: json['approval_reason'],
+      approvedBy: json['approved_by'],
+      approvedByName: json['approved_by_name'],
+      approvedByJabatan: json['approved_by_jabatan'],
+      approvedDate: json['approved_date'] == null ? null : DateTime.parse(json['approved_date']),
     );
   }
 
@@ -43,8 +69,15 @@ class AttendaceModel {
         'id_lokasi_fisik': idLokasiFisik,
         'lat': lat,
         'lon': lon,
+        'address': address,
         'created_date': createdDate,
         'created_by': createdBy,
+        'approval_status': approvalStatus,
+        'approval_reason': approvalReason,
+        'approved_by': approvedBy,
+        'approved_by_name': approvedByName,
+        'approved_by_jabatan': approvedByJabatan,
+        'approved_date': approvedDate?.toIso8601String(),
       };
 
   //crete function chekin

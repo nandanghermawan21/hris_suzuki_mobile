@@ -9,6 +9,9 @@ class ApiEndPoint {
   String checkInUrl = "attendance/checkin";
   String checkOutUrl = "attendance/checkout";
   String pegawaiProfile = "pegawai/myprofile";
+  String kehadiranSaya = "attendance/kehadiransaya";
+  String kehadiranpegawai = "attendance/kehadiranpegawai";
+  String approvalKehadiran = "attendance/approvalKehadiran";
 
 
   String get url {

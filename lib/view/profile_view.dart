@@ -38,6 +38,19 @@ class ProfileViewState extends State<ProfileView>
         context: context,
         title: System.data.strings!.profile,
         textColor: System.data.color!.primaryColor,
+        action: GestureDetector(
+          onTap: () {
+            // loadProfile();
+          },
+          child: SizedBox(
+            height: 50,
+            width: 50,
+            child: Icon(
+              Icons.refresh,
+              color: System.data.color!.primaryColor,
+            ),
+          ),
+        ),
       ),
       body: body(),
     );

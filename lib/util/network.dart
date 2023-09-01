@@ -145,6 +145,8 @@ class Network {
       } else {
         throw e;
       }
+    }).whenComplete(() {
+      debugPrint("GET $uri");
     });
   }
 

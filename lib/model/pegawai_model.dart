@@ -23,6 +23,7 @@ class PegawaiModel {
   String? cabang;
   String? levelGol;
   String? level;
+  String? urutan;
   String? homebase;
   String? statusKerja;
   String? lokasiFisik;
@@ -76,6 +77,7 @@ class PegawaiModel {
     this.cabang,
     this.levelGol,
     this.level,
+    this.urutan,
     this.homebase,
     this.statusKerja,
     this.lokasiFisik,
@@ -133,6 +135,7 @@ class PegawaiModel {
       cabang: json["cabang"] as String?,
       levelGol: json["level_gol"] as String?,
       level: json["level"] as String?,
+      urutan: json["urutan"] as String?,
       homebase: json["homebase"] as String?,
       statusKerja: json["status_kerja"] as String?,
       lokasiFisik: json["lokasi_fisik"] as String?,
@@ -197,6 +200,7 @@ class PegawaiModel {
       "cabang": cabang,
       "level_gol": levelGol,
       "level": level,
+      "urutan": urutan,
       "homebase": homebase,
       "status_kerja": statusKerja,
       "lokasi_fisik": lokasiFisik,
