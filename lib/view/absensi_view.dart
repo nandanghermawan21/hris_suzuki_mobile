@@ -372,7 +372,8 @@ class _AbsensiViewState extends State<AbsensiView>
     );
   }
 
-  void showModalApprovalKehadiran(int idPegawai, DateTime tanggal) {
+  void showModalApprovalKehadiran(int idPegawai, DateTime tanggal,
+      {bool isMine = true}) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -404,7 +405,10 @@ class _AbsensiViewState extends State<AbsensiView>
                         return ListView.builder(
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index) {
-                            return approvalKehadiranItem(snapshot.data![index]);
+                            return approvalKehadiranItem(
+                              snapshot.data![index],
+                              isMine: isMine,
+                            );
                           },
                         );
                       } else {
@@ -430,7 +434,7 @@ class _AbsensiViewState extends State<AbsensiView>
     );
   }
 
-  Widget approvalKehadiranItem(AttendaceModel? data) {
+  Widget approvalKehadiranItem(AttendaceModel? data, {bool isMine = true}) {
     return Container(
       margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(10),
@@ -559,25 +563,28 @@ class _AbsensiViewState extends State<AbsensiView>
                     const SizedBox(
                       height: 10,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                          ),
-                          onPressed: () {
-                            showApprovalConfirm();
-                          },
-                          child: Text(
-                            'Tolak',
-                            style: System.data.textStyles!.headLine3.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
+                    isMine
+                        ? const SizedBox()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                ),
+                                onPressed: () {
+                                  showApprovalConfirm();
+                                },
+                                child: Text(
+                                  'Tolak',
+                                  style: System.data.textStyles!.headLine3
+                                      .copyWith(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
                   ],
                 ),
               ),
