@@ -594,6 +594,7 @@ class _AbsensiViewState extends State<AbsensiView>
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
           body: Align(
             alignment: Alignment.bottomCenter,
