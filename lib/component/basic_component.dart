@@ -5,6 +5,7 @@ class BasicComponent {
   static Widget avatar({
     double? size,
     VoidCallback? onTap,
+    String? url,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -24,7 +25,7 @@ class BasicComponent {
             Radius.circular(50),
           ),
           child: Image.network(
-            "",
+            url ?? "",
             fit: BoxFit.fitHeight,
             errorBuilder: (bb, o, st) => Container(
               color: Colors.transparent,

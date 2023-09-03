@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:suzuki/util/geolocator_util.dart';
 import 'package:suzuki/util/network.dart';
 import 'package:suzuki/util/system.dart';
+import 'package:suzuki/util/date.dart';
 
 class AttendaceModel {
   int? idPegawai; //	integer
@@ -14,14 +15,12 @@ class AttendaceModel {
   String? address; //	string
   DateTime? createdDate; //	string
   int? createdBy;
-  bool? approvalStatus;
+  int? approvalStatus;
   String? approvalReason;
-  String? approvedBy;
+  int? approvedBy;
   String? approvedByName;
   String? approvedByJabatan;
   DateTime? approvedDate;
-
-
 
   AttendaceModel({
     this.idPegawai,
@@ -51,14 +50,16 @@ class AttendaceModel {
       lat: json['lat'],
       lon: json['lon'],
       address: json['address'],
-      createdDate: DateTime.parse(json['created_date']),
+      createdDate: json['created_date'] == null ? null : Dates.parseUtc(json['created_date']).toLocal(),
       createdBy: json['created_by'],
-      approvalStatus: json['approval_status'],
+      approvalStatus: json['approval_status'] as int?,
       approvalReason: json['approval_reason'],
       approvedBy: json['approved_by'],
       approvedByName: json['approved_by_name'],
       approvedByJabatan: json['approved_by_jabatan'],
-      approvedDate: json['approved_date'] == null ? null : DateTime.parse(json['approved_date']),
+      approvedDate: json['approved_date'] == null
+          ? null
+          : Dates.parseUtc(json['approved_date']).toLocal(),
     );
   }
 

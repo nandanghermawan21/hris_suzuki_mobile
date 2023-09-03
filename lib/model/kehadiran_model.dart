@@ -18,6 +18,7 @@ class KehadiranModel {
   String? kodeStatusKehadiran;
   DateTime? jamMasuk;
   DateTime? jamKeluar;
+  int? rejected;
   List<AttendaceModel> kehadiran = [];
 
   KehadiranModel({
@@ -32,6 +33,7 @@ class KehadiranModel {
     this.kodeStatusKehadiran,
     this.jamMasuk,
     this.jamKeluar,
+    this.rejected,
     this.kehadiran = const [],
   });
 
@@ -41,7 +43,7 @@ class KehadiranModel {
     fotoPegawai = json['foto_pegawai'];
     jabatanId = json['jabatan_id'];
     namaJabatan = json['nama_jabatan'];
-    tanggal = DateTime.parse(json['tanggal']);
+    tanggal = Dates.parseUtc(json['tanggal']);
     statusKehadiranId = json['status_kehadiran_id'];
     namaStatusKehadiran = json['nama_status_kehadiran'];
     kodeStatusKehadiran = json['kode_status_kehadiran'];
@@ -49,6 +51,7 @@ class KehadiranModel {
         json['jam_masuk'] != null ? Dates.parseUtc(json['jam_masuk']) : null;
     jamKeluar =
         json['jam_keluar'] != null ? Dates.parseUtc(json['jam_keluar']) : null;
+    rejected = json['rejected'];
     if (json['kehadiran'] != null) {
       kehadiran = <AttendaceModel>[];
       json['kehadiran'].forEach((v) {
@@ -70,6 +73,7 @@ class KehadiranModel {
     data['kode_status_kehadiran'] = kodeStatusKehadiran;
     data['jam_masuk'] = jamMasuk!.toIso8601String();
     data['jam_keluar'] = jamKeluar!.toIso8601String();
+    data['rejected'] = rejected;
     if (kehadiran.isNotEmpty) {
       data['kehadiran'] = kehadiran.map((v) => v.toJson()).toList();
     }
@@ -79,11 +83,17 @@ class KehadiranModel {
   //create funtion get kehadiaransaya
   static Future<List<KehadiranModel>> getKehadiranSaya({
     required String token,
+    required int bulan,
+    required int tahun,
   }) {
     return Network.get(
         url: Uri.parse(
           System.data.apiEndPoint.url + System.data.apiEndPoint.kehadiranSaya,
         ),
+        querys: {
+          "bulan": "$bulan",
+          "tahun": "$tahun",
+        },
         headers: {
           HttpHeaders.acceptHeader: "application/json",
           HttpHeaders.contentMD5Header: "application/json",
@@ -141,6 +151,33 @@ class KehadiranModel {
       },
     ).then((value) {
       return (value as List).map((e) => AttendaceModel.fromJson(e)).toList();
+    }).catchError((onError) {
+      throw onError;
+    });
+  }
+
+  //get reject kehadian by check in check out model
+  //create funtion reject kehadiaransaya
+  static Future<AttendaceModel> rejectKehadiran({
+    required String token,
+    required int idKehadiran,
+    required String alasan,
+  }) {
+    return Network.post(
+      url: Uri.parse(
+        System.data.apiEndPoint.url + System.data.apiEndPoint.rejectKehadiran,
+      ),
+      body: {
+        "attendanceId": "$idKehadiran",
+        "reason": alasan,
+      },
+      headers: {
+        HttpHeaders.acceptHeader: "application/json",
+        HttpHeaders.contentMD5Header: "application/json",
+        HttpHeaders.authorizationHeader: "bearer $token",
+      },
+    ).then((value) {
+      return AttendaceModel.fromJson(value);
     }).catchError((onError) {
       throw onError;
     });

@@ -117,9 +117,9 @@ class PegawaiModel {
       id: json["id_pegawai"] as int?,
       nip: json["nip"] as String?,
       namaPegawai: json["nama_pegawai"] as String?,
-      // filePhoto: json["file_photo"] as String?,
-      filePhoto:
-          "https://media.istockphoto.com/id/1338134319/photo/portrait-of-young-indian-businesswoman-or-school-teacher-pose-indoors.jpg?s=612x612&w=0&k=20&c=Dw1nKFtnU_Bfm2I3OPQxBmSKe9NtSzux6bHqa9lVZ7A=",
+      filePhoto: json["file_photo"] as String?,
+      // filePhoto:
+      //     "https://media.istockphoto.com/id/1338134319/photo/portrait-of-young-indian-businesswoman-or-school-teacher-pose-indoors.jpg?s=612x612&w=0&k=20&c=Dw1nKFtnU_Bfm2I3OPQxBmSKe9NtSzux6bHqa9lVZ7A=",
       idJabatan: json["id_jabatan"] as int?,
       namaJabatan: json["nama_jabatan"] as String?,
       groupingJabatan: json["Grouping_Jabatan"] as String?,

@@ -12,6 +12,7 @@ class ApiEndPoint {
   String kehadiranSaya = "attendance/kehadiransaya";
   String kehadiranpegawai = "attendance/kehadiranpegawai";
   String approvalKehadiran = "attendance/approvalKehadiran";
+  String rejectKehadiran = "attendance/rejectKehadiran";
 
 
   String get url {
