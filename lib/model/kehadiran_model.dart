@@ -13,6 +13,7 @@ class KehadiranModel {
   int? jabatanId;
   String? namaJabatan;
   DateTime? tanggal;
+  int? timeZone;
   int? statusKehadiranId;
   String? namaStatusKehadiran;
   String? kodeStatusKehadiran;
@@ -21,6 +22,19 @@ class KehadiranModel {
   int? rejected;
   List<AttendaceModel> kehadiran = [];
 
+  String get timeZoneMane {
+    switch (timeZone) {
+      case 5:
+        return "WIT";
+      case 6:
+        return "WITA";
+      case 7:
+        return "WIB";
+      default:
+        return "WIB";
+    }
+  }
+
   KehadiranModel({
     this.pegawaiId,
     this.namaPegawai,
@@ -28,6 +42,7 @@ class KehadiranModel {
     this.jabatanId,
     this.namaJabatan,
     this.tanggal,
+    this.timeZone,
     this.statusKehadiranId,
     this.namaStatusKehadiran,
     this.kodeStatusKehadiran,
@@ -44,13 +59,18 @@ class KehadiranModel {
     jabatanId = json['jabatan_id'];
     namaJabatan = json['nama_jabatan'];
     tanggal = Dates.parseUtc(json['tanggal']);
+    timeZone = json['time_zone'];
     statusKehadiranId = json['status_kehadiran_id'];
     namaStatusKehadiran = json['nama_status_kehadiran'];
     kodeStatusKehadiran = json['kode_status_kehadiran'];
-    jamMasuk =
-        json['jam_masuk'] != null ? Dates.parseUtc(json['jam_masuk']) : null;
-    jamKeluar =
-        json['jam_keluar'] != null ? Dates.parseUtc(json['jam_keluar']) : null;
+    jamMasuk = json['jam_masuk'] != null
+        ? DateTime.parse(json['jam_masuk'])
+            .add(Duration(hours: (timeZone ?? 7) - 7))
+        : null;
+    jamKeluar = json['jam_keluar'] != null
+        ? DateTime.parse(json['jam_keluar'])
+            .add(Duration(hours: (timeZone ?? 7) - 7))
+        : null;
     rejected = json['rejected'];
     if (json['kehadiran'] != null) {
       kehadiran = <AttendaceModel>[];
@@ -68,6 +88,7 @@ class KehadiranModel {
     data['jabatan_id'] = jabatanId;
     data['nama_jabatan'] = namaJabatan;
     data['tanggal'] = tanggal!.toIso8601String();
+    data['time_zone'] = timeZone;
     data['status_kehadiran_id'] = statusKehadiranId;
     data['nama_status_kehadiran'] = namaStatusKehadiran;
     data['kode_status_kehadiran'] = kodeStatusKehadiran;

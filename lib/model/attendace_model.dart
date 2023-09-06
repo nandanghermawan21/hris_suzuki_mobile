@@ -14,6 +14,7 @@ class AttendaceModel {
   double? lon; //	number($double)
   String? address; //	string
   DateTime? createdDate; //	string
+  int? timeZone;
   int? createdBy;
   int? approvalStatus;
   String? approvalReason;
@@ -21,6 +22,7 @@ class AttendaceModel {
   String? approvedByName;
   String? approvedByJabatan;
   DateTime? approvedDate;
+  int? approvedTimeZone;
 
   AttendaceModel({
     this.idPegawai,
@@ -31,6 +33,7 @@ class AttendaceModel {
     this.lon,
     this.address,
     this.createdDate,
+    this.timeZone,
     this.createdBy,
     this.approvalStatus,
     this.approvalReason,
@@ -38,10 +41,13 @@ class AttendaceModel {
     this.approvedDate,
     this.approvedByName,
     this.approvedByJabatan,
+    this.approvedTimeZone,
   }); //	string
 
   //crete from json app
   factory AttendaceModel.fromJson(Map<String, dynamic> json) {
+    int timeZone = json['time_zone'] as int? ?? 7;
+    int approvedTimeZone = json['approved_time_zone'] as int? ?? 7;
     return AttendaceModel(
       idPegawai: json['id_pegawai'],
       idAttendance: json['id_attendance'],
@@ -50,7 +56,11 @@ class AttendaceModel {
       lat: json['lat'],
       lon: json['lon'],
       address: json['address'],
-      createdDate: json['created_date'] == null ? null : Dates.parseUtc(json['created_date']).toLocal(),
+      createdDate: json['created_date'] == null
+          ? null
+          : DateTime.parse(json['created_date'])
+              .add(Duration(hours: timeZone - 7)),
+      timeZone: json['time_zone'],
       createdBy: json['created_by'],
       approvalStatus: json['approval_status'] as int?,
       approvalReason: json['approval_reason'],
@@ -59,8 +69,36 @@ class AttendaceModel {
       approvedByJabatan: json['approved_by_jabatan'],
       approvedDate: json['approved_date'] == null
           ? null
-          : Dates.parseUtc(json['approved_date']).toLocal(),
+          : DateTime.parse(json['approved_date'])
+              .add(Duration(hours: approvedTimeZone - 7)),
+      approvedTimeZone: json['approved_time_zone'],
     );
+  }
+
+  String get timeZoneMane {
+    switch (timeZone) {
+      case 5:
+        return "WIT";
+      case 6:
+        return "WITA";
+      case 7:
+        return "WIB";
+      default:
+        return "WIB";
+    }
+  }
+
+  get approvedTimeZoneMane {
+    switch (approvedTimeZone) {
+      case 5:
+        return "WIT";
+      case 6:
+        return "WITA";
+      case 7:
+        return "WIB";
+      default:
+        return "WIB";
+    }
   }
 
   //create to json app

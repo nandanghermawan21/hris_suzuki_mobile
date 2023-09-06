@@ -35,6 +35,8 @@ class Network {
         "appVersion": System.data.versionName,
         "appVersionCode": "${System.data.versionCode}",
         "messagingToken": "${System.data.global.messagingToken}",
+        "TimeZone": "${timeStamp.timeZoneOffset.inHours}",
+        "TimeZoneName": timeStamp.timeZoneName,
       },
     );
 
@@ -106,6 +108,8 @@ class Network {
       "appVersion": System.data.versionName,
       "appVersionCode": "${System.data.versionCode}",
       "messagingToken": "${System.data.global.messagingToken}",
+      "TimeZone": "${timeStamp.timeZoneOffset.inHours}",
+      "TimeZoneName": timeStamp.timeZoneName,
     });
 
     Map<String, String> newQuery = {};

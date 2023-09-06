@@ -132,6 +132,7 @@ class _AbsensiViewState extends State<AbsensiView>
                     ],
                     onChanged: (val) {
                       model.bulanTerpilih = val ?? 1;
+                      model.commit();
                       kehadiranSayaController.refresh();
                     },
                   ),
@@ -153,6 +154,7 @@ class _AbsensiViewState extends State<AbsensiView>
                     ],
                     onChanged: (val) {
                       model.tahunTerpilih = val ?? 2021;
+                      model.commit();
                       kehadiranSayaController.refresh();
                     },
                   ),
@@ -299,7 +301,7 @@ class _AbsensiViewState extends State<AbsensiView>
                                     style: System
                                         .data.textStyles!.boldTitleLabel
                                         .copyWith(
-                                            fontSize: 40, color: Colors.white),
+                                            fontSize: 35, color: Colors.white),
                                   ),
                                 )
                               : BasicComponent.avatar(
@@ -424,8 +426,9 @@ class _AbsensiViewState extends State<AbsensiView>
                                   Text(
                                     data?.jamMasuk == null
                                         ? "-"
-                                        : DateFormat("HH:mm")
-                                            .format(data!.jamMasuk!.toLocal()),
+                                        : DateFormat("HH:mm").format(
+                                                data!.jamMasuk!.toLocal()) +
+                                            " ${data.timeZoneMane}",
                                     style: System.data.textStyles!.headLine2,
                                   ),
                                 ],
@@ -448,8 +451,9 @@ class _AbsensiViewState extends State<AbsensiView>
                                   Text(
                                     data?.jamKeluar == null
                                         ? "-"
-                                        : DateFormat("HH:mm")
-                                            .format(data!.jamKeluar!.toLocal()),
+                                        : DateFormat("HH:mm").format(
+                                                data!.jamKeluar!.toLocal()) +
+                                            " ${data.timeZoneMane}",
                                     style: System.data.textStyles!.headLine2,
                                   ),
                                 ],
@@ -613,7 +617,7 @@ class _AbsensiViewState extends State<AbsensiView>
                               child: Text(
                                 data?.createdDate == null
                                     ? "-"
-                                    : DateFormat("hh:mm",
+                                    : DateFormat("HH:mm",
                                             System.data.strings!.locale)
                                         .format(data!.createdDate!),
                                 style:
@@ -629,11 +633,12 @@ class _AbsensiViewState extends State<AbsensiView>
                         SizedBox(
                           height: 15,
                           child: Text(
-                            data?.approvalStatus == 0 ? "Ditolak" : "Valid",
+                            // data?.approvalStatus == 0 ? "Ditolak" : "Valid",
+                            data?.timeZoneMane ?? "WIB",
                             style: System.data.textStyles!.headLine3.copyWith(
-                              color: data?.approvalStatus == 0
-                                  ? const Color.fromARGB(255, 164, 18, 5)
-                                  : null,
+                              // color: data?.approvalStatus == 0
+                              //     ? const Color.fromARGB(255, 164, 18, 5)
+                              //     : null,
                             ),
                           ),
                         )
@@ -702,9 +707,10 @@ class _AbsensiViewState extends State<AbsensiView>
                         : const SizedBox(),
                     data?.approvalStatus != null
                         ? Text(
-                            "${data?.approvedByName} @${data?.approvedDate != null ? DateFormat("hh:mm:ss", System.data.strings!.locale).format(data!.approvedDate!) : "-"}",
-                            style: System.data.textStyles!.headLine2.copyWith(
+                            "${data?.approvedByName} @${data?.approvedDate != null ? DateFormat("dd-MM-yy hh:mm:ss", System.data.strings!.locale).format(data!.approvedDate!) : "-"} ${data?.approvedTimeZoneMane}",
+                            style: System.data.textStyles!.headLine3.copyWith(
                               color: Colors.red,
+                              fontSize: 14,
                             ),
                           )
                         : const SizedBox(),
