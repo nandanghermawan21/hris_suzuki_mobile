@@ -133,4 +133,10 @@ abstract class Strings {
   String get leaveReason => "Leave Reason";
 
   String get submit => "Submit";
+
+  String get selectPhoto => "Select Photo";
+
+  String get camera => "Camera";
+
+  String get galery => "Galery";
 }

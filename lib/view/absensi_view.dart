@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -636,10 +640,10 @@ class _AbsensiViewState extends State<AbsensiView>
                             // data?.approvalStatus == 0 ? "Ditolak" : "Valid",
                             data?.timeZoneMane ?? "WIB",
                             style: System.data.textStyles!.headLine3.copyWith(
-                              // color: data?.approvalStatus == 0
-                              //     ? const Color.fromARGB(255, 164, 18, 5)
-                              //     : null,
-                            ),
+                                // color: data?.approvalStatus == 0
+                                //     ? const Color.fromARGB(255, 164, 18, 5)
+                                //     : null,
+                                ),
                           ),
                         )
                       ],
@@ -668,20 +672,50 @@ class _AbsensiViewState extends State<AbsensiView>
                                   .format(data!.createdDate!),
                           style: System.data.textStyles!.headLine3,
                         ),
-                        GestureDetector(
-                          onTap: () async {
-                            final url =
-                                'https://www.google.com/maps/search/?api=1&query=${data?.lat},${data?.lon}';
-                            if (await canLaunchUrlString(url)) {
-                              await launchUrlString(url);
-                            } else {
-                              throw 'Tidak dapat membuka Google Maps';
-                            }
-                          },
-                          child: Icon(
-                            FontAwesomeIcons.mapMarked,
-                            color: System.data.color!.primaryColor,
-                          ),
+                        Row(
+                          children: [
+                            data!.attendanceImage != null
+                                ? GestureDetector(
+                                    onTap: () async {
+                                      showImageViewer(
+                                        context,
+                                        MemoryImage(
+                                          Uint8List.fromList(base64.decode(data
+                                              .attendanceImage!
+                                              .split(',')
+                                              .last)),
+                                        ),
+                                        immersive: false,
+                                        useSafeArea: true,
+                                        onViewerDismissed: () {},
+                                      );
+                                    },
+                                    child: Icon(
+                                      FontAwesomeIcons.image,
+                                      color: System.data.color!.primaryColor,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                System.data.sendToBackGround = false;
+                                final url =
+                                    'https://www.google.com/maps/search/?api=1&query=${data?.lat},${data?.lon}';
+                                if (await canLaunchUrlString(url)) {
+                                  await launchUrlString(url);
+                                } else {
+                                  throw 'Tidak dapat membuka Google Maps';
+                                }
+                              },
+                              child: Icon(
+                                FontAwesomeIcons.mapMarked,
+                                color: System.data.color!.primaryColor,
+                              ),
+                            ),
+                          ],
                         )
                       ],
                     ),

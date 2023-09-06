@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:suzuki/util/geolocator_util.dart';
 import 'package:suzuki/util/network.dart';
 import 'package:suzuki/util/system.dart';
-import 'package:suzuki/util/date.dart';
 
 class AttendaceModel {
   int? idPegawai; //	integer
@@ -23,6 +22,7 @@ class AttendaceModel {
   String? approvedByJabatan;
   DateTime? approvedDate;
   int? approvedTimeZone;
+  String? attendanceImage;
 
   AttendaceModel({
     this.idPegawai,
@@ -42,6 +42,7 @@ class AttendaceModel {
     this.approvedByName,
     this.approvedByJabatan,
     this.approvedTimeZone,
+    this.attendanceImage,
   }); //	string
 
   //crete from json app
@@ -72,6 +73,7 @@ class AttendaceModel {
           : DateTime.parse(json['approved_date'])
               .add(Duration(hours: approvedTimeZone - 7)),
       approvedTimeZone: json['approved_time_zone'],
+      attendanceImage: json['attendance_image'],
     );
   }
 
@@ -117,11 +119,13 @@ class AttendaceModel {
         'approved_by_name': approvedByName,
         'approved_by_jabatan': approvedByJabatan,
         'approved_date': approvedDate?.toIso8601String(),
+        'attendance_image': attendanceImage,
       };
 
   //crete function chekin
   static Future<AttendaceModel> checkIn({
     String? token,
+    String? image,
   }) {
     return GeolocatorUtil.myLocation().then((value) {
       return GeolocatorUtil.getAddress(value.latitude, value.longitude)
@@ -134,6 +138,7 @@ class AttendaceModel {
               "lat": value.latitude,
               "lon": value.longitude,
               "address": address,
+              'image': image
             },
             headers: {
               HttpHeaders.acceptHeader: "application/json",
@@ -155,6 +160,7 @@ class AttendaceModel {
 
   static Future<AttendaceModel> checkOut({
     String? token,
+    String? image,
   }) {
     return GeolocatorUtil.myLocation().then((value) {
       return GeolocatorUtil.getAddress(value.latitude, value.longitude)
@@ -167,6 +173,7 @@ class AttendaceModel {
               "lat": value.latitude,
               "lon": value.longitude,
               "address": address,
+              'image': image
             },
             headers: {
               HttpHeaders.acceptHeader: "application/json",

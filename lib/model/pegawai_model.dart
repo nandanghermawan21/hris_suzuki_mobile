@@ -11,6 +11,7 @@ class PegawaiModel {
   int? idJabatan;
   String? namaJabatan;
   String? groupingJabatan;
+  String? needPhoto;
   String? kodeCostCenter;
   String? costCenter;
   String? namaPilar;
@@ -65,6 +66,7 @@ class PegawaiModel {
     this.idJabatan,
     this.namaJabatan,
     this.groupingJabatan,
+    this.needPhoto,
     this.kodeCostCenter,
     this.costCenter,
     this.namaPilar,
@@ -123,6 +125,7 @@ class PegawaiModel {
       idJabatan: json["id_jabatan"] as int?,
       namaJabatan: json["nama_jabatan"] as String?,
       groupingJabatan: json["Grouping_Jabatan"] as String?,
+      needPhoto: json["need_photo"] as String?,
       kodeCostCenter: json["kode_cost_center"] as String?,
       costCenter: json["cost_center"] as String?,
       namaPilar: json["nama_pilar"] as String?,
@@ -188,6 +191,7 @@ class PegawaiModel {
       "id_jabatan": idJabatan,
       "nama_jabatan": namaJabatan,
       "Grouping_Jabatan": groupingJabatan,
+      "need_photo": needPhoto,
       "kode_cost_center": kodeCostCenter,
       "cost_center": costCenter,
       "nama_pilar": namaPilar,

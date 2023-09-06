@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
+import 'package:suzuki/component/image_picker_component.dart';
 import 'package:suzuki/model/menu_model.dart';
 import 'package:suzuki/util/data.dart';
 import 'package:suzuki/util/sized_util.dart';
@@ -47,7 +48,11 @@ class HomeViewState extends State<HomeView> {
         backgroundColor: Colors.white,
         iconColor: Colors.white,
         onTap: () {
-          popupCheckInCheckOut(context);
+          viewModel.getMyprofile().then((val) {
+            viewModel.attendanceImageController.clear();
+            viewModel.attendanceImageController.commit();
+            popupCheckInCheckOut(context);
+          });
         },
       ),
       MenuModel(
@@ -222,7 +227,7 @@ class HomeViewState extends State<HomeView> {
                       mainMenu.length,
                       (index) {
                         return GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             mainMenu[index].onTap!();
                           },
                           child: Container(
@@ -470,10 +475,23 @@ class HomeViewState extends State<HomeView> {
             child: Column(
               children: [
                 Expanded(
-                  child: SizedBox(
-                    width: 150,
-                    child: Image.asset("assets/attendance_ilustration.jpeg"),
-                  ),
+                  child: System.data.global.myProfile?.needPhoto == 'y'
+                      ? Container(
+                        color: Colors.transparent,
+                          child: Center(
+                            child: ImagePickerComponent(
+                              controller: viewModel.attendanceImageController,
+                              galery: false,
+                              containerHeight: 150,
+                              containerWidth: 100,
+                            ),
+                          ),
+                        )
+                      : SizedBox(
+                          width: 150,
+                          child:
+                              Image.asset("assets/attendance_ilustration.jpeg"),
+                        ),
                 ),
                 Text(
                   "Are you sure for check in/out now?",
