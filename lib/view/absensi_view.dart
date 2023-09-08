@@ -703,7 +703,7 @@ class _AbsensiViewState extends State<AbsensiView>
                               onTap: () async {
                                 System.data.sendToBackGround = false;
                                 final url =
-                                    'https://www.google.com/maps/search/?api=1&query=${data?.lat},${data?.lon}';
+                                    'https://www.google.com/maps/search/?api=1&query=${data.lat},${data.lon}';
                                 if (await canLaunchUrlString(url)) {
                                   await launchUrlString(url);
                                 } else {
@@ -724,31 +724,31 @@ class _AbsensiViewState extends State<AbsensiView>
                     ),
                     Expanded(
                       child: Text(
-                        data?.address ?? "-",
+                        data.address ?? "-",
                         style: System.data.textStyles!.headLine2,
                       ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    data?.approvalStatus != null
+                    data.approvalStatus != null
                         ? Text(
-                            data?.approvalReason ?? "-",
+                            data.approvalReason ?? "-",
                             style: System.data.textStyles!.headLine2.copyWith(
                               color: Colors.red,
                             ),
                           )
                         : const SizedBox(),
-                    data?.approvalStatus != null
+                    data.approvalStatus != null
                         ? Text(
-                            "${data?.approvedByName} @${data?.approvedDate != null ? DateFormat("dd-MM-yy hh:mm:ss", System.data.strings!.locale).format(data!.approvedDate!) : "-"} ${data?.approvedTimeZoneMane}",
+                            "${data.approvedByName} @${data.approvedDate != null ? DateFormat("dd-MM-yy hh:mm:ss", System.data.strings!.locale).format(data.approvedDate!) : "-"} ${data.approvedTimeZoneMane}",
                             style: System.data.textStyles!.headLine3.copyWith(
                               color: Colors.red,
                               fontSize: 14,
                             ),
                           )
                         : const SizedBox(),
-                    isMine || data?.approvalStatus != null
+                    isMine || data.approvalStatus != null
                         ? const SizedBox()
                         : Row(
                             mainAxisAlignment: MainAxisAlignment.end,
