@@ -22,8 +22,8 @@ void setting() {
   System.data.font = FontDefault();
   //change end point on dev mode
   if (System.data.versionName.split(".")[1] == "1") {
-    System.data.apiEndPoint.baseUrl = "https://form.bagdja.com/api/";
-    System.data.apiEndPoint.baseUrlDebug = "https://form.bagdja.com/api/";
+    System.data.apiEndPoint.baseUrl = "http://172.16.1.18/hris-api/";
+    System.data.apiEndPoint.baseUrlDebug = "http://172.16.1.18/hris-api/";
   } else {
     if (System.data.versionName.split(" ").last == "Train") {
       System.data.apiEndPoint.baseUrl = "http://172.16.1.167/survey/api/";
