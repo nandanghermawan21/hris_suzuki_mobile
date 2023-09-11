@@ -14,7 +14,7 @@ import 'package:suzuki/util/system.dart';
 import 'package:suzuki/route.dart' as route;
 
 void setting() {
-  System.data.versionName = "1.3.53";
+  System.data.versionName = "1.1.1";
   System.data.route = route.route;
   System.data.apiEndPoint = ApiEndPoint();
   System.data.strings = StringsIdId();
@@ -22,8 +22,8 @@ void setting() {
   System.data.font = FontDefault();
   //change end point on dev mode
   if (System.data.versionName.split(".")[1] == "1") {
-    System.data.apiEndPoint.baseUrl = "http://172.16.1.18/hris-api/";
-    System.data.apiEndPoint.baseUrlDebug = "http://172.16.1.18/hris-api/";
+    System.data.apiEndPoint.baseUrl = "http://172.16.1.18/hris-api/api/";
+    System.data.apiEndPoint.baseUrlDebug = "http://172.16.1.18/hris-api/api/";
   } else {
     if (System.data.versionName.split(" ").last == "Train") {
       System.data.apiEndPoint.baseUrl = "http://172.16.1.167/survey/api/";
