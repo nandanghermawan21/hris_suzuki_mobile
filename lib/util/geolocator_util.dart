@@ -1,7 +1,6 @@
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:suzuki/util/system.dart';
 class GeolocatorUtil {
   static Future<Position> myLocation() async {
     try {
@@ -43,7 +42,7 @@ class GeolocatorUtil {
     return placemarkFromCoordinates(lat, lon).then((onValue) {
       return changeToAddress(onValue.first);
     }).catchError((onError) {
-      return alt ?? System.data.strings!.invalidLocationOnAddress;
+      return alt ?? '$lat - $lon';
     });
   }
 

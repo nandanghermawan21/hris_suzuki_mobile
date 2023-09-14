@@ -6,7 +6,8 @@ class FormCutiViewModel extends ChangeNotifier {
   DateTime? rangeStartDay;
   DateTime? rangeEndDay;
   TipeCutiModel tipeCuti = TipeCutiModel();
-  int? tipeCutiId;
+  String? leaveType;
+  int? leaveId;
   List<DateTime> tanggalCuti = [];
   TextEditingController alasanCuti = TextEditingController();
 

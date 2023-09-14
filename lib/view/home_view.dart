@@ -475,9 +475,11 @@ class HomeViewState extends State<HomeView> {
             child: Column(
               children: [
                 Expanded(
-                  child: System.data.global.myProfile?.needPhoto == 'y'
+                  child: (System.data.global.myProfile?.userNeedPhoto ??
+                              System.data.global.myProfile?.needPhoto) ==
+                          'y'
                       ? Container(
-                        color: Colors.transparent,
+                          color: Colors.transparent,
                           child: Center(
                             child: ImagePickerComponent(
                               controller: viewModel.attendanceImageController,

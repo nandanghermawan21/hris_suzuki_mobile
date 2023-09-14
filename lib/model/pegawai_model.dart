@@ -57,6 +57,8 @@ class PegawaiModel {
   String? npwp;
   String? nikKtp;
   DateTime? tanggalLahir;
+  String? userUseLokasiFisik;
+  String? userNeedPhoto;
 
   PegawaiModel({
     this.id,
@@ -112,6 +114,8 @@ class PegawaiModel {
     this.npwp,
     this.nikKtp,
     this.tanggalLahir,
+    this.userUseLokasiFisik,
+    this.userNeedPhoto,
   });
 
   factory PegawaiModel.fromJson(Map<String, dynamic> json) {
@@ -179,6 +183,8 @@ class PegawaiModel {
       tanggalLahir: json["tanggal_lahir"] == null
           ? null
           : DateTime.parse(json["tanggal_lahir"] as String),
+      userUseLokasiFisik: json["user_use_lokasi_fisik"] as String?,
+      userNeedPhoto: json["user_need_photo"] as String?,
     );
   }
 
@@ -236,6 +242,8 @@ class PegawaiModel {
       "ptkp": ptkp,
       "npwp": npwp,
       "nik_ktp": nikKtp,
+      "tanggal_lahir": tanggalLahir,
+      "user_use_lokasi_fisik": userUseLokasiFisik,
     };
   }
 

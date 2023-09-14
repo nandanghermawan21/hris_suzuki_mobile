@@ -178,7 +178,7 @@ class StringsIdId extends Strings {
   String get checkInCheckOutAttendance => "Check In/Out\nKehadiran";
 
   @override
-  String get requestLeave => "Permohonan\nCuti";
+  String get requestLeave => "Permohonan\nCuti / Izin";
 
   @override
   String get requestLemurs => "Permohonan\nLembur";
@@ -193,7 +193,7 @@ class StringsIdId extends Strings {
   String get attendance => "Kehadiran";
 
   @override
-  String get leave => "Cuti";
+  String get leave => "Cuti / Izin";
 
   @override
   String get lemurs => "Lembur";
@@ -221,7 +221,7 @@ class StringsIdId extends Strings {
   String get employeName => "Nama Karyawan";
 
   @override
-  String get myLeave => "Cuti Saya";
+  String get myLeave => "Cuti / Izin Saya";
 
   @override
   String get needApproval => "Butuh Persetujuan";
@@ -233,10 +233,10 @@ class StringsIdId extends Strings {
   String get position => "Jabatan";
 
   @override
-  String get leaveType => "Tipe Cuti";
+  String get leaveType => "Tipe Cuti / Izin";
 
   @override
-  String get leaveDate => "Tanggal Cuti";
+  String get leaveDate => "Tanggal Cuti / Izin";
 
   @override
   String get leaveReason => "Alasan Cuti";

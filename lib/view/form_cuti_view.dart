@@ -52,6 +52,10 @@ class _FormCutiViewState extends State<FormCutiView> {
                 const SizedBox(
                   height: 20,
                 ),
+                // jenis(),
+                // const SizedBox(
+                //   height: 20,
+                // ),
                 tipeCuti(),
                 const SizedBox(
                   height: 20,
@@ -204,6 +208,67 @@ class _FormCutiViewState extends State<FormCutiView> {
     );
   }
 
+  Widget jenis() {
+    return Container(
+      color: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            System.data.strings!.leave,
+            style: System.data.textStyles!.headLine3,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            width: double.infinity,
+            height: 45,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              border: Border.all(
+                color: Colors.grey.shade300,
+              ),
+            ),
+            child: Consumer<FormCutiViewModel>(
+              builder: (c, d, w) {
+                return DropdownButton<String>(
+                  isExpanded: true,
+                  underline: const SizedBox(),
+                  value: model.leaveType,
+                  items: [
+                    DropdownMenuItem<String>(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Izin",
+                            style: System.data.textStyles!.headLine2,
+                          ),
+                        ),
+                        value: "izin"),
+                    DropdownMenuItem<String>(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Cuti",
+                            style: System.data.textStyles!.headLine2,
+                          ),
+                        ),
+                        value: "cuti"),
+                  ],
+                  onChanged: (value) {
+                    model.leaveType = value;
+                    model.commit();
+                  },
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget tipeCuti() {
     return Container(
       color: Colors.transparent,
@@ -231,7 +296,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                 return DropdownButton<int>(
                   isExpanded: true,
                   underline: const SizedBox(),
-                  value: model.tipeCutiId,
+                  value: model.leaveId,
                   items: List.generate(TipeCutiModel.dummy().length, (index) {
                     return DropdownMenuItem<int>(
                       child: Padding(
@@ -245,9 +310,11 @@ class _FormCutiViewState extends State<FormCutiView> {
                     );
                   }),
                   onChanged: (value) {
-                    var selected = TipeCutiModel.dummy().where((e) => e.id == value).first;
-                    model.tipeCutiId = value;
-                    if(model.tipeCuti.rangeMode == false && selected.rangeMode == true){
+                    var selected =
+                        TipeCutiModel.dummy().where((e) => e.id == value).first;
+                    model.leaveId = value;
+                    if (model.tipeCuti.rangeMode == false &&
+                        selected.rangeMode == true) {
                       model.tanggalCuti.clear();
                       model.rangeStartDay = null;
                       model.rangeEndDay = null;
@@ -344,7 +411,8 @@ class _FormCutiViewState extends State<FormCutiView> {
                           defaultBuilder: (context, day, focusedDay) {
                             return dayBuilder(day);
                           },
-                          rangeStartBuilder: (context, day, focusedDay) => dayBuilder(day),
+                          rangeStartBuilder: (context, day, focusedDay) =>
+                              dayBuilder(day),
                         ),
                         onDaySelected: (day1, day2) {
                           if (model.tanggalCuti.contains(day1)) {

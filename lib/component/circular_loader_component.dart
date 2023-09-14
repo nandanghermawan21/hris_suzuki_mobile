@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_super_html_viewer/flutter_super_html_viewer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/util/type.dart';
@@ -155,17 +155,17 @@ class CircularLoaderComponent extends StatelessWidget {
               ),
               !controller.value.message!.contains("<div")
                   ? Material(
-                    child: Text(
+                      child: Text(
                         controller.value.message ?? "Error",
                         textAlign: TextAlign.center,
                       ),
-                  )
+                    )
                   : Container(
                       height: 300,
                       color: Colors.transparent,
                       child: SingleChildScrollView(
-                        child: Html(
-                          data: controller.value.message,
+                        child: HtmlContentViewer(
+                          htmlContent: controller.value.message ?? "",
                         ),
                       ),
                     ),
@@ -225,8 +225,8 @@ class CircularLoaderComponent extends StatelessWidget {
                             color: Colors.transparent,
                             child: Material(
                               child: SingleChildScrollView(
-                                child: Html(
-                                  data: controller.value.message,
+                                child: HtmlContentViewer(
+                                  htmlContent: controller.value.message ?? "",
                                 ),
                               ),
                             ),

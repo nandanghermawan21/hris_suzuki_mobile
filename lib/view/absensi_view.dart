@@ -167,21 +167,38 @@ class _AbsensiViewState extends State<AbsensiView>
             );
           }),
           Expanded(
-            child: ListDataComponent<KehadiranModel>(
-              controller: kehadiranSayaController,
-              autoSearch: false,
-              enableGetMore: false,
-              enableDrag: false,
-              dataSource: (skip, key) {
-                return KehadiranModel.getKehadiranSaya(
-                  token: System.data.global.token ?? "",
-                  bulan: model.bulanTerpilih,
-                  tahun: model.tahunTerpilih,
-                );
-              },
-              itemBuilder: (data, index) {
-                return kehadiranItem(data);
-              },
+            child: Column(
+              children: [
+                Expanded(
+                  child: ListDataComponent<KehadiranModel>(
+                    controller: kehadiranSayaController,
+                    autoSearch: false,
+                    enableGetMore: false,
+                    enableDrag: false,
+                    dataSource: (skip, key) {
+                      return KehadiranModel.getKehadiranSaya(
+                        token: System.data.global.token ?? "",
+                        bulan: model.bulanTerpilih,
+                        tahun: model.tahunTerpilih,
+                      );
+                    },
+                    itemBuilder: (data, index) {
+                      return kehadiranItem(data);
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(
+                        System.data.color!.primaryColor),
+                  ),
+                  child: Text(
+                    "Ajukan Izin",
+                    style: System.data.textStyles!.boldTitleLightLabel,
+                  ),
+                )
+              ],
             ),
           ),
         ],

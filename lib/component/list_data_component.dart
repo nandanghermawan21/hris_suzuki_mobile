@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_super_html_viewer/flutter_super_html_viewer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:suzuki/util/error_handling_util.dart';
@@ -535,8 +535,8 @@ class _ListDataComponentState<T> extends State<ListDataComponent<T>> {
                   height: 300,
                   color: Colors.transparent,
                   child: SingleChildScrollView(
-                    child: Html(
-                      data: widget.controller?.value.errorMessage,
+                    child: HtmlContentViewer(
+                      htmlContent: widget.controller?.value.errorMessage ?? "",
                     ),
                   ),
                 ),

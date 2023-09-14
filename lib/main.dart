@@ -197,6 +197,8 @@ class MyAppState extends State<MyApp> with WidgetsBindingObserver {
         debugPrint("app state detached");
         MoveToBackground.moveTaskToBack();
         break;
+      default:
+        break;
     }
   }
 }

@@ -165,7 +165,7 @@ class LoginViewState extends State<LoginView> {
                                 onTap: () {
                                   Clipboard.setData(ClipboardData(
                                           text:
-                                              System.data.deviceInfo?.deviceId))
+                                              System.data.deviceInfo?.deviceId ?? ''))
                                       .then((value) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
@@ -277,7 +277,7 @@ class LoginViewState extends State<LoginView> {
                         color: Colors.transparent,
                         width: double.infinity,
                         margin: const EdgeInsets.all(20),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           // children: [
                           //   Row(
