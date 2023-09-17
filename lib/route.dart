@@ -93,7 +93,11 @@ Map<String, WidgetBuilder> route = {
     );
   },
   RouteName.formCuti: (BuildContext context) {
-    return const FormCutiView();
+    return  FormCutiView(
+      onSubmitSucess: (){
+        Navigator.of(context).pushNamedAndRemoveUntil(RouteName.cuti, (r) => r.settings.name == RouteName.home);
+      },
+    );
   },
   RouteName.absensi: (BuildContext context) {
     return const AbsensiView();

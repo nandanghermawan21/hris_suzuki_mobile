@@ -139,4 +139,6 @@ abstract class Strings {
   String get camera => "Camera";
 
   String get galery => "Galery";
+
+  String get category => "Category";
 }

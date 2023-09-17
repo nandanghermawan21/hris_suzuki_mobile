@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:skeleton_text/skeleton_text.dart';
+import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/model/decoration_component.dart';
 import 'package:suzuki/model/jatah_cuti_model.dart';
-import 'package:suzuki/model/tipe_cuti_model.dart';
+import 'package:suzuki/model/category_attendace_model.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view_model/form_cuti_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class FormCutiView extends StatefulWidget {
-  const FormCutiView({Key? key}) : super(key: key);
+  final VoidCallback onSubmitSucess;
+
+  const FormCutiView({
+    Key? key,
+    required this.onSubmitSucess,
+  }) : super(key: key);
 
   @override
   _FormCutiViewState createState() => _FormCutiViewState();
@@ -22,13 +29,16 @@ class _FormCutiViewState extends State<FormCutiView> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: model,
-      child: Scaffold(
-        appBar: DecorationComponent.appBar(
-          context: context,
-          title: System.data.strings!.formLeave,
-          textColor: System.data.color!.primaryColor,
+      child: CircularLoaderComponent(
+        controller: model.loadingController,
+        child: Scaffold(
+          appBar: DecorationComponent.appBar(
+            context: context,
+            title: System.data.strings!.formLeave,
+            textColor: System.data.color!.primaryColor,
+          ),
+          body: body(),
         ),
-        body: body(),
       ),
     );
   }
@@ -52,11 +62,11 @@ class _FormCutiViewState extends State<FormCutiView> {
                 const SizedBox(
                   height: 20,
                 ),
-                // jenis(),
-                // const SizedBox(
-                //   height: 20,
-                // ),
                 tipeCuti(),
+                const SizedBox(
+                  height: 20,
+                ),
+                namaCuti(),
                 const SizedBox(
                   height: 20,
                 ),
@@ -177,7 +187,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                       height: 5,
                     ),
                     Text(
-                      System.data.global.myProfile?.namaJabatan ?? "",
+                      System.data.global.myProfile?.namaPegawai ?? "",
                       style: System.data.textStyles!.headLine2,
                     ),
                   ],
@@ -208,14 +218,14 @@ class _FormCutiViewState extends State<FormCutiView> {
     );
   }
 
-  Widget jenis() {
+  Widget tipeCuti() {
     return Container(
       color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            System.data.strings!.leave,
+            System.data.strings!.leaveType,
             style: System.data.textStyles!.headLine3,
           ),
           const SizedBox(
@@ -258,6 +268,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                   ],
                   onChanged: (value) {
                     model.leaveType = value;
+                    model.leaveTypeController.add(value!);
                     model.commit();
                   },
                 );
@@ -269,14 +280,14 @@ class _FormCutiViewState extends State<FormCutiView> {
     );
   }
 
-  Widget tipeCuti() {
+  Widget namaCuti() {
     return Container(
       color: Colors.transparent,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            System.data.strings!.leaveType,
+            System.data.strings!.category,
             style: System.data.textStyles!.headLine3,
           ),
           const SizedBox(
@@ -291,36 +302,82 @@ class _FormCutiViewState extends State<FormCutiView> {
                 color: Colors.grey.shade300,
               ),
             ),
-            child: Consumer<FormCutiViewModel>(
-              builder: (c, d, w) {
-                return DropdownButton<int>(
-                  isExpanded: true,
-                  underline: const SizedBox(),
-                  value: model.leaveId,
-                  items: List.generate(TipeCutiModel.dummy().length, (index) {
-                    return DropdownMenuItem<int>(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          TipeCutiModel.dummy()[index].nama ?? "",
-                          style: System.data.textStyles!.headLine2,
+            child: StreamBuilder(
+              stream: model.leaveTypeController.stream,
+              initialData: null,
+              builder: (sc, ss) {
+                return FutureBuilder<List<CategoryAttendanceModel>>(
+                  future: model.leaveType == 'izin'
+                      ? CategoryAttendanceModel.getIzinTersedia(
+                          token: System.data.global.token ?? "",
+                        )
+                      : Future.value().then((value) => []),
+                  builder: (c, s) {
+                    if (s.connectionState == ConnectionState.waiting) {
+                      return SkeletonAnimation(
+                        shimmerColor: Colors.grey.shade300,
+                        gradientColor: Colors.grey.shade100,
+                        child: Container(
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(8)),
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
                         ),
-                      ),
-                      value: TipeCutiModel.dummy()[index].id,
-                    );
-                  }),
-                  onChanged: (value) {
-                    var selected =
-                        TipeCutiModel.dummy().where((e) => e.id == value).first;
-                    model.leaveId = value;
-                    if (model.tipeCuti.rangeMode == false &&
-                        selected.rangeMode == true) {
-                      model.tanggalCuti.clear();
-                      model.rangeStartDay = null;
-                      model.rangeEndDay = null;
+                      );
+                    } else {
+                      return Container(
+                        height: 50,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(8)),
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                          ),
+                        ),
+                        child: StreamBuilder(
+                            stream: model
+                                .selectedCategoryAttendanceController.stream,
+                            builder: (d, w) {
+                              return DropdownButton<int>(
+                                isExpanded: true,
+                                underline: const SizedBox(),
+                                value: model.leaveId,
+                                items: List.generate(
+                                  s.data?.length ?? 0,
+                                  (index) {
+                                    return DropdownMenuItem(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          s.data?[index].attendance ?? "",
+                                          style:
+                                              System.data.textStyles!.headLine2,
+                                        ),
+                                      ),
+                                      value: s.data?[index].idAttendance,
+                                    );
+                                  },
+                                ),
+                                onChanged: (val) {
+                                  model.leaveId = val;
+                                  model.selectedCategoryAttendance = s.data
+                                          ?.firstWhere((element) =>
+                                              element.idAttendance == val) ??
+                                      CategoryAttendanceModel();
+                                  model.selectedCategoryAttendanceController
+                                      .add(model.selectedCategoryAttendance);
+                                  model.commit();
+                                },
+                              );
+                            }),
+                      );
                     }
-                    model.tipeCuti = selected;
-                    model.commit();
                   },
                 );
               },
@@ -354,6 +411,8 @@ class _FormCutiViewState extends State<FormCutiView> {
                 ),
               ),
               child: Consumer<FormCutiViewModel>(builder: (c, d, w) {
+                debugPrint(
+                    'picker mode ${model.selectedCategoryAttendance.pickerDateMode}');
                 return Column(
                   children: [
                     Container(
@@ -404,9 +463,11 @@ class _FormCutiViewState extends State<FormCutiView> {
                       child: TableCalendar(
                         focusedDay: model.focusedDay ?? DateTime.now(),
                         availableGestures: AvailableGestures.all,
-                        rangeSelectionMode: model.tipeCuti.rangeMode == true
-                            ? RangeSelectionMode.toggledOn
-                            : RangeSelectionMode.toggledOff,
+                        rangeSelectionMode:
+                            model.selectedCategoryAttendance.pickerDateMode ==
+                                    'RANGE'
+                                ? RangeSelectionMode.toggledOn
+                                : RangeSelectionMode.toggledOff,
                         calendarBuilders: CalendarBuilders(
                           defaultBuilder: (context, day, focusedDay) {
                             return dayBuilder(day);
@@ -497,18 +558,25 @@ class _FormCutiViewState extends State<FormCutiView> {
   }
 
   Widget submitButton() {
-    return Container(
-      width: double.infinity,
-      height: 50,
-      decoration: BoxDecoration(
-        color: System.data.color!.primaryColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Center(
-        child: Text(
-          System.data.strings!.submit,
-          style: System.data.textStyles!.headLine2.copyWith(
-            color: System.data.color!.lightTextColor,
+    return GestureDetector(
+      onTap: () {
+        model.submitIzin(
+          onSuccess: widget.onSubmitSucess
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        height: 50,
+        decoration: BoxDecoration(
+          color: System.data.color!.primaryColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(
+            System.data.strings!.submit,
+            style: System.data.textStyles!.headLine2.copyWith(
+              color: System.data.color!.lightTextColor,
+            ),
           ),
         ),
       ),

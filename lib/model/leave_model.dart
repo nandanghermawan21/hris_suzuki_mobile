@@ -1,7 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:suzuki/model/psrsetujuan_atasan_model.dart';
+import 'dart:io';
 
-class CutiModel {
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:suzuki/model/psrsetujuan_atasan_model.dart';
+import 'package:suzuki/util/network.dart';
+import 'package:suzuki/util/system.dart';
+
+class LeaveModel {
   int? idCuti;
   DateTime? tanggalPengajuan;
   int? tipeCuti;
@@ -16,7 +21,7 @@ class CutiModel {
   String? statusCuti;
   Color? warnaStatusCuti;
 
-  CutiModel(
+  LeaveModel(
       {this.idCuti,
       this.tanggalPengajuan,
       this.tipeCuti,
@@ -31,7 +36,7 @@ class CutiModel {
       this.statusCuti,
       this.warnaStatusCuti});
 
-  CutiModel.fromJson(Map<String, dynamic> json) {
+  LeaveModel.fromJson(Map<String, dynamic> json) {
     idCuti = json['id_cuti'];
     tanggalPengajuan = DateTime.parse(json['tanggal_pengajuan']);
     tipeCuti = json['tipe_cuti'];
@@ -84,19 +89,19 @@ class CutiModel {
   }
 
   //dummy
-  static List<CutiModel> cutiSaya() {
+  static List<LeaveModel> cutiSaya() {
     return [
-      CutiModel(
+      LeaveModel(
         idCuti: 1,
         tanggalPengajuan: DateTime(2023, 7, 20, 10, 5),
         tipeCuti: 1,
-        warnaCuti: Colors.tealAccent.shade700,
+        warnaCuti: Colors.redAccent.shade700,
         idPegawaiPemohon: 1,
         namaPegawaiPemohon: "Andri",
         persetujuanAtasan: PersetujuanAtasanModel.getAtasan(
           disetujuiSuperVisor: true,
         ),
-        namaTipeCuti: "Cuti Tahunan",
+        namaTipeCuti: "Izin Sakit",
         alasanCuti: "Pulang Kampung",
         tanggalCuti: [
           DateTime(2023, 5, 25),
@@ -106,7 +111,7 @@ class CutiModel {
         statusCuti: "Belum Disetujui",
         warnaStatusCuti: const Color.fromARGB(255, 211, 89, 22),
       ),
-      CutiModel(
+      LeaveModel(
         idCuti: 1,
         tipeCuti: 2,
         tanggalPengajuan: DateTime(2023, 6, 20, 20, 35),
@@ -131,9 +136,9 @@ class CutiModel {
     ];
   }
 
-  static List<CutiModel> butuhPersetujuan() {
+  static List<LeaveModel> butuhPersetujuan() {
     return [
-      CutiModel(
+      LeaveModel(
         idCuti: 1,
         tanggalPengajuan: DateTime(2023, 5, 20, 20, 25),
         tipeCuti: 1,
@@ -153,7 +158,7 @@ class CutiModel {
         statusCuti: "Belum Disetujui",
         warnaStatusCuti: const Color.fromARGB(255, 211, 89, 22),
       ),
-      CutiModel(
+      LeaveModel(
         idCuti: 1,
         tipeCuti: 2,
         tanggalPengajuan: DateTime(2023, 6, 20, 18, 45),
@@ -176,5 +181,33 @@ class CutiModel {
         warnaStatusCuti: Colors.green.shade900,
       ),
     ];
+  }
+
+  //create function to get data from api
+  static Future<void> submitIzin({
+    required String token,
+    required int idAttendance,
+    required String reason,
+    required List<DateTime> dates,
+  }) {
+    return Network.post(
+      url: Uri.parse(
+        System.data.apiEndPoint.url + System.data.apiEndPoint.submitIzin,
+      ),
+      headers: {
+        HttpHeaders.acceptHeader: "application/json",
+        HttpHeaders.contentMD5Header: "application/json",
+        HttpHeaders.authorizationHeader: "bearer $token",
+      },
+      body: {
+        "idAttendance": idAttendance,
+        "reason": reason,
+        "dates": dates.map((e) => DateFormat('yyyy-MM-dd').format(e)).toList(),
+      }
+    ).then((value) {
+      return;
+    }).catchError((onError) {
+      throw onError;
+    });
   }
 }

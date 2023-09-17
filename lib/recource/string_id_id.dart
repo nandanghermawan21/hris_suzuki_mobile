@@ -227,20 +227,23 @@ class StringsIdId extends Strings {
   String get needApproval => "Butuh Persetujuan";
 
   @override
-  String get formLeave => "Formulir Cuti";
+  String get formLeave => "Formulir Cuti / Izin";
 
   @override
   String get position => "Jabatan";
 
   @override
-  String get leaveType => "Tipe Cuti / Izin";
+  String get leaveType => "Tipe";
 
   @override
-  String get leaveDate => "Tanggal Cuti / Izin";
+  String get leaveDate => "Tanggal";
 
   @override
-  String get leaveReason => "Alasan Cuti";
+  String get leaveReason => "Alasan";
 
   @override
   String get submit => "Kirim";
+
+  @override
+  String get category => "Kategori";
 }

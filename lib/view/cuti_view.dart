@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:suzuki/component/list_data_component.dart';
-import 'package:suzuki/model/cuti_model.dart';
+import 'package:suzuki/model/leave_model.dart';
 import 'package:suzuki/model/decoration_component.dart';
 import 'package:suzuki/model/jatah_cuti_model.dart';
 import 'package:suzuki/util/system.dart';
@@ -19,10 +19,10 @@ class CutiView extends StatefulWidget {
 
 class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
   TabController? tabController;
-  ListDataComponentController<CutiModel> cutiSayaController =
-      ListDataComponentController<CutiModel>();
-  ListDataComponentController<CutiModel> butuhPersetujuanController =
-      ListDataComponentController<CutiModel>();
+  ListDataComponentController<LeaveModel> cutiSayaController =
+      ListDataComponentController<LeaveModel>();
+  ListDataComponentController<LeaveModel> butuhPersetujuanController =
+      ListDataComponentController<LeaveModel>();
 
   @override
   void initState() {
@@ -185,13 +185,13 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
   Widget cutiSaya() {
     return Container(
       color: Colors.transparent,
-      child: ListDataComponent<CutiModel>(
+      child: ListDataComponent<LeaveModel>(
         controller: cutiSayaController,
         enableDrag: false,
         enableGetMore: false,
         autoSearch: false,
         dataSource: (skip, key) {
-          return Future.value(CutiModel.cutiSaya());
+          return Future.value(LeaveModel.cutiSaya());
         },
         itemBuilder: (item, index) {
           return itemCuti(item);
@@ -203,13 +203,13 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
   Widget butuhPersetujuan() {
     return Container(
       color: Colors.transparent,
-      child: ListDataComponent<CutiModel>(
+      child: ListDataComponent<LeaveModel>(
         controller: butuhPersetujuanController,
         enableDrag: false,
         enableGetMore: false,
         autoSearch: false,
         dataSource: (skip, key) {
-          return Future.value(CutiModel.butuhPersetujuan());
+          return Future.value(LeaveModel.butuhPersetujuan());
         },
         itemBuilder: (item, index) {
           return itemCuti(item, asApprover: true);
@@ -218,7 +218,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
     );
   }
 
-  Widget itemCuti(CutiModel? data, {bool? asApprover}) {
+  Widget itemCuti(LeaveModel? data, {bool? asApprover}) {
     return GestureDetector(
       onTap: () {
         detailCuti(data, asApprover);
@@ -383,7 +383,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                 height: 10,
                               ),
                               Text(
-                                "Tanggal Cuti",
+                                "Tanggal",
                                 style: System.data.textStyles!.headLine3,
                               ),
                               const SizedBox(
@@ -432,7 +432,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
   }
 
   void detailCuti(
-    CutiModel? data,
+    LeaveModel? data,
     bool? asApprover,
   ) {
     showModalBottomSheet(
@@ -574,7 +574,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "Tanggal Cuti",
+                                              "Tanggal",
                                               style: System
                                                   .data.textStyles!.headLine3,
                                             ),

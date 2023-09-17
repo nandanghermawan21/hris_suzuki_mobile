@@ -53,19 +53,19 @@ class PersetujuanAtasanModel {
     bool? disetujuiManager,
   }) {
     return <PersetujuanAtasanModel>[
-      PersetujuanAtasanModel(
-        idPegawai: 2,
-        namaPegawai: "Susi",
-        idJabatan: 2,
-        namaJabatan: "Supervisor",
-        tanggalPersetujuan: DateTime.now(),
-        idPersetujuanStatus: disetujuiSuperVisor == true ? 1 : 0,
-        namaPersetujuanStatus:
-            disetujuiSuperVisor == true ? "Disetuji" : "Belum Disetujui",
-        warnaPersetujuanStatus: disetujuiSuperVisor == true
-            ? Colors.green.shade900
-            : const Color.fromARGB(255, 211, 89, 22),
-      ),
+      // PersetujuanAtasanModel(
+      //   idPegawai: 2,
+      //   namaPegawai: "Susi",
+      //   idJabatan: 2,
+      //   namaJabatan: "Supervisor",
+      //   tanggalPersetujuan: DateTime.now(),
+      //   idPersetujuanStatus: disetujuiSuperVisor == true ? 1 : 0,
+      //   namaPersetujuanStatus:
+      //       disetujuiSuperVisor == true ? "Disetuji" : "Belum Disetujui",
+      //   warnaPersetujuanStatus: disetujuiSuperVisor == true
+      //       ? Colors.green.shade900
+      //       : const Color.fromARGB(255, 211, 89, 22),
+      // ),
       PersetujuanAtasanModel(
         idPegawai: 1,
         namaPegawai: "Budi",
