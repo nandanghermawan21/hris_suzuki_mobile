@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:skeleton_text/skeleton_text.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
+import 'package:suzuki/component/image_picker_component.dart';
 import 'package:suzuki/model/decoration_component.dart';
 import 'package:suzuki/model/jatah_cuti_model.dart';
 import 'package:suzuki/model/category_attendace_model.dart';
@@ -75,6 +76,10 @@ class _FormCutiViewState extends State<FormCutiView> {
                   height: 20,
                 ),
                 alasanCuti(),
+                const SizedBox(
+                  height: 20,
+                ),
+                attachment(),
                 const SizedBox(
                   height: 20,
                 ),
@@ -268,6 +273,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                   ],
                   onChanged: (value) {
                     model.leaveType = value;
+                    model.tanggalCuti.clear();
                     model.leaveTypeController.add(value!);
                     model.commit();
                   },
@@ -310,7 +316,12 @@ class _FormCutiViewState extends State<FormCutiView> {
                   future: model.leaveType == 'izin'
                       ? CategoryAttendanceModel.getIzinTersedia(
                           token: System.data.global.token ?? "",
-                        )
+                        ).then((value) {
+                          debugPrint("total data ${value.length}");
+                          return value;
+                        }).catchError((onError) {
+                          debugPrint("error $onError");
+                        })
                       : Future.value().then((value) => []),
                   builder: (c, s) {
                     if (s.connectionState == ConnectionState.waiting) {
@@ -372,6 +383,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                                       CategoryAttendanceModel();
                                   model.selectedCategoryAttendanceController
                                       .add(model.selectedCategoryAttendance);
+                                  model.tanggalCuti.clear();
                                   model.commit();
                                 },
                               );
@@ -458,7 +470,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                       ),
                     ),
                     Container(
-                      height: 350,
+                      height: 400,
                       color: Colors.transparent,
                       child: TableCalendar(
                         focusedDay: model.focusedDay ?? DateTime.now(),
@@ -479,6 +491,23 @@ class _FormCutiViewState extends State<FormCutiView> {
                           if (model.tanggalCuti.contains(day1)) {
                             model.tanggalCuti.remove(day1);
                           } else {
+                            if (model.tanggalCuti.length + 1 >
+                                model.selectedCategoryAttendance.count!) {
+                              model.loadingController.stopLoading(
+                                isError: true,
+                                message:
+                                    "Jumlah maksinal hari yang dapat diambil adalah ${model.selectedCategoryAttendance.count} hari",
+                              );
+                              return;
+                            }
+                            if (!model.validateTanggalPengajuan(day1)) {
+                              model.loadingController.stopLoading(
+                                isError: true,
+                                message:
+                                    "Tanggal pengajuan melebihi batas pengajuan",
+                              );
+                              return;
+                            }
                             model.tanggalCuti.add(day1);
                           }
                           model.focusedDay = day1;
@@ -502,9 +531,13 @@ class _FormCutiViewState extends State<FormCutiView> {
                             model.rangeEndDay = day2;
                             model.focusedDay = day2;
                           }
+                          if (!model.validateTanggal()) {
+                            model.tanggalCuti.clear();
+                          }
                           model.commit();
                         },
-                        firstDay: DateTime.now(),
+                        firstDay: DateTime.now()
+                            .add(const Duration(days: (365 * -10))),
                         lastDay: DateTime(
                             DateTime.now().year + 1, DateTime.june, 31),
                         rangeStartDay: model.rangeEndDay,
@@ -557,12 +590,42 @@ class _FormCutiViewState extends State<FormCutiView> {
     );
   }
 
+  Widget attachment() {
+    return Container(
+      color: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            System.data.strings!.leaveReason,
+            style: System.data.textStyles!.headLine3,
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Container(
+            width: double.infinity,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              border: Border.all(
+                color: Colors.grey.shade300,
+              ),
+            ),
+            child: ImagePickerComponent(
+              controller: model.attachmentController,
+              galery: false,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
   Widget submitButton() {
     return GestureDetector(
       onTap: () {
-        model.submitIzin(
-          onSuccess: widget.onSubmitSucess
-        );
+        model.submitIzin(onSuccess: widget.onSubmitSucess);
       },
       child: Container(
         width: double.infinity,

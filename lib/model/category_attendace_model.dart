@@ -9,6 +9,8 @@ class CategoryAttendanceModel {
   String? attendance;
   String? type;
   int? count;
+  int? batasPengajuan;
+  int? batasPengajuanBulan;
   String? sex;
   String? pickerDateMode;
 
@@ -20,6 +22,8 @@ class CategoryAttendanceModel {
     this.type,
     this.sex,
     this.count,
+    this.batasPengajuan,
+    this.batasPengajuanBulan,
     this.pickerDateMode,
   });
 
@@ -32,6 +36,8 @@ class CategoryAttendanceModel {
       type: json['type'] as String?,
       count: json['count'] as int?,
       sex: json['sex'] as String?,
+      batasPengajuan: json['batas_pengajuan'] as int?,
+      batasPengajuanBulan: json['batas_pengajuan_bulan'] as int?,
       pickerDateMode: json['picker_date_mode'] as String?,
     );
   }
@@ -45,6 +51,8 @@ class CategoryAttendanceModel {
       'type': type,
       'count': count,
       'sex': sex,
+      'batas_pengajuan': batasPengajuan,
+      'batas_pengajuan_bulan': batasPengajuanBulan,
       'picker_date_mode': pickerDateMode,
     };
   }

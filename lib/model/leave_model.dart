@@ -189,6 +189,7 @@ class LeaveModel {
     required int idAttendance,
     required String reason,
     required List<DateTime> dates,
+    String attachment = "",
   }) {
     return Network.post(
       url: Uri.parse(
@@ -203,6 +204,7 @@ class LeaveModel {
         "idAttendance": idAttendance,
         "reason": reason,
         "dates": dates.map((e) => DateFormat('yyyy-MM-dd').format(e)).toList(),
+        "attachment": attachment,
       }
     ).then((value) {
       return;
