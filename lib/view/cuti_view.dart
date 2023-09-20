@@ -512,33 +512,33 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Status",
-                                              style: System
-                                                  .data.textStyles!.headLine3,
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Text(
-                                              data?.status ?? "",
-                                              style: System
-                                                  .data.textStyles!.headLine2
-                                                  .copyWith(
-                                                      // color: data?.warnaStatusCuti,
-                                                      ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
+                                    // Expanded(
+                                    //   child: Container(
+                                    //     color: Colors.transparent,
+                                    //     child: Column(
+                                    //       crossAxisAlignment:
+                                    //           CrossAxisAlignment.start,
+                                    //       children: [
+                                    //         Text(
+                                    //           "Status",
+                                    //           style: System
+                                    //               .data.textStyles!.headLine3,
+                                    //         ),
+                                    //         const SizedBox(
+                                    //           height: 5,
+                                    //         ),
+                                    //         Text(
+                                    //           data?.status ?? "",
+                                    //           style: System
+                                    //               .data.textStyles!.headLine2
+                                    //               .copyWith(
+                                    //                   // color: data?.warnaStatusCuti,
+                                    //                   ),
+                                    //         ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                                 const SizedBox(
