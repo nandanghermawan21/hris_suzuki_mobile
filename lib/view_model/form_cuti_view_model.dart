@@ -91,10 +91,6 @@ class FormCutiViewModel extends ChangeNotifier {
     //validasi tanggal apakah sudah melebihi batas pengajuan
     for (var tanggal in tanggalCuti) {
       if (validateTanggalPengajuan(tanggal) == false) {
-        loadingController.stopLoading(
-          isError: true,
-          message: "Tanggal pengajuan melebihi batas pengajuan",
-        );
         return false;
       }
     }
@@ -107,21 +103,28 @@ class FormCutiViewModel extends ChangeNotifier {
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     if (selectedCategoryAttendance.batasPengajuanBulan != null) {
       batasPengajuan = DateTime(
-          tanggalPengajuan.year,
-          tanggalPengajuan.month -
+          batasPengajuan.year,
+          batasPengajuan.month +
               (selectedCategoryAttendance.batasPengajuanBulan ?? 0),
-          tanggalPengajuan.day);
+          batasPengajuan.day);
     }
     if (selectedCategoryAttendance.batasPengajuan != null) {
       batasPengajuan = DateTime(
-          tanggalPengajuan.year,
-          tanggalPengajuan.month,
-          tanggalPengajuan.day +
+          batasPengajuan.year,
+          batasPengajuan.month,
+          batasPengajuan.day +
               (selectedCategoryAttendance.batasPengajuan ?? 0));
     }
-    if (batasPengajuan.isAfter(tangalSekarang) || batasPengajuan == tangalSekarang) {
+    // debugPrint("batas pengajuan ${selectedCategoryAttendance.batasPengajuanBulan} $tanggalPengajuan => $batasPengajuan => $tangalSekarang");
+    if (batasPengajuan.isAfter(tangalSekarang) ||
+        batasPengajuan == tangalSekarang) {
       return true;
     } else {
+      loadingController.stopLoading(
+        isError: true,
+        message:
+            "Tanggal pengajuan melebihi batas pengajuan \n Batas maksimal pengajuan ${selectedCategoryAttendance.attendance} adalah ${selectedCategoryAttendance.batasPengajuanBulan != null && selectedCategoryAttendance.batasPengajuanBulan != 0 ? selectedCategoryAttendance.batasPengajuanBulan.toString() + " bulan" : ""} ${selectedCategoryAttendance.batasPengajuanBulan != null && selectedCategoryAttendance.batasPengajuan != 0 ? selectedCategoryAttendance.batasPengajuan.toString() + " hari" : ""}",
+      );
       return false;
     }
   }

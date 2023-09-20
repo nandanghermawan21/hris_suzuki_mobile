@@ -319,7 +319,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                         ).then((value) {
                           debugPrint("total data ${value.length}");
                           return value;
-                        // ignore: body_might_complete_normally_catch_error
+                          // ignore: body_might_complete_normally_catch_error
                         }).catchError((onError) {
                           debugPrint("error $onError");
                         })
@@ -492,8 +492,10 @@ class _FormCutiViewState extends State<FormCutiView> {
                           if (model.tanggalCuti.contains(day1)) {
                             model.tanggalCuti.remove(day1);
                           } else {
-                            if (model.tanggalCuti.length + 1 >
-                                model.selectedCategoryAttendance.count!) {
+                            if (model.selectedCategoryAttendance.count !=
+                                    null &&
+                                model.tanggalCuti.length + 1 >
+                                    model.selectedCategoryAttendance.count!) {
                               model.loadingController.stopLoading(
                                 isError: true,
                                 message:
@@ -502,11 +504,6 @@ class _FormCutiViewState extends State<FormCutiView> {
                               return;
                             }
                             if (!model.validateTanggalPengajuan(day1)) {
-                              model.loadingController.stopLoading(
-                                isError: true,
-                                message:
-                                    "Tanggal pengajuan melebihi batas pengajuan",
-                              );
                               return;
                             }
                             model.tanggalCuti.add(day1);

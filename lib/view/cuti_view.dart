@@ -259,9 +259,10 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                     Text(
                       data?.tglPengajuan == null
                           ? ""
-                          : DateFormat("dd MM yyyy HH:mm",
-                                  System.data.strings!.locale)
-                              .format(data!.tglPengajuan!) + " ${data.tglPengajuanTimezoneName ?? ""}",
+                          : DateFormat("dd MMM yyyy HH:mm",
+                                      System.data.strings!.locale)
+                                  .format(data!.tglPengajuan!) +
+                              " ${data.tglPengajuanTimezoneName ?? ""}",
                       style: System.data.textStyles!.headLine3,
                     ),
                     Container(
@@ -361,6 +362,9 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                         ],
                                       ),
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
                                   ),
                                   Expanded(
                                     child: Container(
@@ -500,13 +504,16 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                               data?.tglPengajuan == null
                                                   ? ""
                                                   : DateFormat(
-                                                          "dd MMM yyyy",
-                                                          System.data.strings!
-                                                              .locale)
-                                                      .format(
-                                                          data!.tglPengajuan!),
+                                                              "dd MMM yyyy HH:mm",
+                                                              System
+                                                                  .data
+                                                                  .strings!
+                                                                  .locale)
+                                                          .format(data!
+                                                              .tglPengajuan!) +
+                                                      " ${data.tglPengajuanTimezoneName ?? ""}",
                                               style: System
-                                                  .data.textStyles!.headLine2,
+                                                  .data.textStyles!.headLine3,
                                             ),
                                           ],
                                         ),
@@ -679,7 +686,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                Row(
+                                data?.idAtasan == null ? const SizedBox() : Row(
                                   children: [
                                     Expanded(
                                       child: Container(
@@ -754,12 +761,10 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                                                 data?.approvedDate ==
                                                                         null
                                                                     ? ""
-                                                                    : DateFormat(
-                                                                            "dd MMM yyyy hh:mm",
-                                                                            System
-                                                                                .data.strings!.locale)
-                                                                        .format(
-                                                                            data!.approvedDate!) + " ${data.approvedTimeZoneName ?? ""}",
+                                                                    : DateFormat("dd MMM yyyy hh:mm",
+                                                                                System.data.strings!.locale)
+                                                                            .format(data!.approvedDate!) +
+                                                                        " ${data.approvedTimeZoneName ?? ""}",
                                                                 style: System
                                                                     .data
                                                                     .textStyles!
