@@ -319,6 +319,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                         ).then((value) {
                           debugPrint("total data ${value.length}");
                           return value;
+                        // ignore: body_might_complete_normally_catch_error
                         }).catchError((onError) {
                           debugPrint("error $onError");
                         })

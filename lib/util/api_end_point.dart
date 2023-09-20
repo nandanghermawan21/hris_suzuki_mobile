@@ -15,6 +15,8 @@ class ApiEndPoint {
   String rejectKehadiran = "attendance/rejectKehadiran";
   String izinTersedia = "attendance/getIzinTersedia";
   String submitIzin = "attendance/submitIzin";
+  String myLeave= "attendance/myLeave";
+  String bawahanLeave= "attendance/bawahanLeave";
 
 
   String get url {

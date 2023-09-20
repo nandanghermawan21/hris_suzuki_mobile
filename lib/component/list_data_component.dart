@@ -618,7 +618,10 @@ class ListDataComponentController<T>
       : super(value ?? ListDataComponentValue<T>());
 
   void addAll(List<T> datas) {
-    value.data.addAll(datas);
+    List<T> _data = [];
+    _data.addAll(value.data);
+    _data.addAll(datas);
+    value.data = _data;
     commit();
   }
 
@@ -674,7 +677,7 @@ class ListDataComponentController<T>
       return;
     }
     value.dataSource!(total, value.searchController.text).then((datas) {
-      value.data.addAll(datas);
+      addAll(datas);
       if (value.onDataReceived != null) {
         value.onDataReceived!(datas, value.searchController.text);
       }
@@ -726,7 +729,7 @@ class ListDataComponentController<T>
 class ListDataComponentValue<T> {
   T? droppedItem;
   int? droppedIndexTarget;
-  List<T> data = [];
+  late List<T> data;
   T? selected;
   ScrollController scrollController = ScrollController();
   TextEditingController searchController = TextEditingController();
@@ -737,7 +740,21 @@ class ListDataComponentValue<T> {
   ValueChanged<T?>? onSelected;
   String? errorMessage;
   int refreshDelayed = 0;
+
+  ListDataComponentValue({
+    this.selected,
+    this.state = ListDataComponentState.firstLoad,
+    this.dataSource,
+    this.onDataReceived,
+    this.onSelected,
+    this.errorMessage,
+    this.refreshDelayed = 0,
+  }){
+    this.data = [];
+  }
 }
+
+
 
 enum ListDataComponentState {
   firstLoad,

@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:suzuki/component/list_data_component.dart';
 import 'package:suzuki/model/leave_model.dart';
 import 'package:suzuki/model/decoration_component.dart';
@@ -85,7 +89,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                         child: FloatingActionButton(
                           backgroundColor: System.data.color!.primaryColor,
                           onPressed: () {
-                             widget.onTapBuatCuti();
+                            widget.onTapBuatCuti();
                           },
                           child: const Icon(Icons.add),
                         ),
@@ -188,10 +192,13 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
       child: ListDataComponent<LeaveModel>(
         controller: cutiSayaController,
         enableDrag: false,
-        enableGetMore: false,
+        enableGetMore: true,
         autoSearch: false,
         dataSource: (skip, key) {
-          return Future.value(LeaveModel.cutiSaya());
+          return LeaveModel.getMyLeave(
+            token: System.data.global.token ?? "",
+            skip: skip,
+          );
         },
         itemBuilder: (item, index) {
           return itemCuti(item);
@@ -206,10 +213,13 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
       child: ListDataComponent<LeaveModel>(
         controller: butuhPersetujuanController,
         enableDrag: false,
-        enableGetMore: false,
+        enableGetMore: true,
         autoSearch: false,
         dataSource: (skip, key) {
-          return Future.value(LeaveModel.butuhPersetujuan());
+          return LeaveModel.getBawahanLeave(
+            token: System.data.global.token ?? "",
+            skip: skip,
+          );
         },
         itemBuilder: (item, index) {
           return itemCuti(item, asApprover: true);
@@ -249,22 +259,22 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      data?.tanggalPengajuan == null
+                      data?.tglPengajuan == null
                           ? ""
                           : DateFormat("dd MM yyyy HH:mm",
                                   System.data.strings!.locale)
-                              .format(data!.tanggalPengajuan!),
+                              .format(data!.tglPengajuan!),
                       style: System.data.textStyles!.headLine3,
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: data?.warnaStatusCuti,
+                        color: data?.color,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       padding: const EdgeInsets.only(
                           bottom: 5, top: 5, right: 10, left: 10),
                       child: Text(
-                        data?.statusCuti ?? "",
+                        data?.status ?? "",
                         style: System.data.textStyles!.headLine3.copyWith(
                             color: System.data.color!.lightTextColor,
                             fontWeight: FontWeight.bold),
@@ -293,12 +303,12 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                               height: 50,
                               width: 50,
                               decoration: BoxDecoration(
-                                color: data?.warnaCuti,
+                                color: data?.color,
                                 borderRadius: BorderRadius.circular(50),
                               ),
                               child: Center(
                                 child: Text(
-                                  "${data?.jumlahCuti ?? ""}",
+                                  "${data?.jumlahLeave ?? ""}",
                                   style: System
                                       .data.textStyles!.boldTitleLightLabel
                                       .copyWith(
@@ -311,7 +321,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                               height: 10,
                             ),
                             Text(
-                              "${data?.namaTipeCuti}",
+                              data?.attendance ?? "",
                               style: System.data.textStyles!.headLine3,
                               textAlign: TextAlign.center,
                             ),
@@ -345,7 +355,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                             height: 5,
                                           ),
                                           Text(
-                                            data?.namaPegawaiPemohon ?? "",
+                                            data?.namaPegawai ?? "",
                                             style: System
                                                 .data.textStyles!.headLine2,
                                           ),
@@ -369,7 +379,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                             height: 5,
                                           ),
                                           Text(
-                                            data?.alasanCuti ?? "",
+                                            data?.reason ?? "",
                                             style: System
                                                 .data.textStyles!.headLine2,
                                           ),
@@ -392,7 +402,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                               Expanded(
                                 child: Wrap(
                                   children: List.generate(
-                                      data?.tanggalCuti.length ?? 0, (index) {
+                                      data?.tanggalLeave?.length ?? 0, (index) {
                                     return Container(
                                       margin: const EdgeInsets.only(
                                           right: 5, bottom: 5),
@@ -403,12 +413,12 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Text(
-                                        data?.tanggalCuti[index] == null
+                                        data?.tanggalLeave?[index] == null
                                             ? ""
                                             : DateFormat("dd/MM/yy",
                                                     System.data.strings!.locale)
-                                                .format(
-                                                    data!.tanggalCuti[index]),
+                                                .format(data!
+                                                    .tanggalLeave![index]!),
                                         style:
                                             System.data.textStyles!.headLine2,
                                       ),
@@ -460,7 +470,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                       children: [
                         avatar(),
                         Text(
-                          data?.namaPegawaiPemohon ?? "",
+                          data?.namaPegawai ?? "",
                           style: System.data.textStyles!.headLine1,
                         ),
                         Expanded(
@@ -486,14 +496,14 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                               height: 5,
                                             ),
                                             Text(
-                                              data?.tanggalPengajuan == null
+                                              data?.tglPengajuan == null
                                                   ? ""
                                                   : DateFormat(
                                                           "dd MMM yyyy",
                                                           System.data.strings!
                                                               .locale)
-                                                      .format(data!
-                                                          .tanggalPengajuan!),
+                                                      .format(
+                                                          data!.tglPengajuan!),
                                               style: System
                                                   .data.textStyles!.headLine2,
                                             ),
@@ -517,12 +527,12 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                               height: 5,
                                             ),
                                             Text(
-                                              data?.statusCuti ?? "",
+                                              data?.status ?? "",
                                               style: System
                                                   .data.textStyles!.headLine2
                                                   .copyWith(
-                                                color: data?.warnaStatusCuti,
-                                              ),
+                                                      // color: data?.warnaStatusCuti,
+                                                      ),
                                             ),
                                           ],
                                         ),
@@ -551,7 +561,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                               height: 5,
                                             ),
                                             Text(
-                                              data?.alasanCuti ?? "",
+                                              data?.reason ?? "",
                                               style: System
                                                   .data.textStyles!.headLine2,
                                             ),
@@ -583,8 +593,8 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                             ),
                                             Wrap(
                                               children: List.generate(
-                                                  data?.tanggalCuti.length ?? 0,
-                                                  (index) {
+                                                  data?.tanggalLeave?.length ??
+                                                      0, (index) {
                                                 return Container(
                                                   margin: const EdgeInsets.only(
                                                       right: 5, bottom: 5),
@@ -602,7 +612,8 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                                             5),
                                                   ),
                                                   child: Text(
-                                                    data?.tanggalCuti[index] ==
+                                                    data?.tanggalLeave?[
+                                                                index] ==
                                                             null
                                                         ? ""
                                                         : DateFormat(
@@ -612,8 +623,8 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                                                     .strings!
                                                                     .locale)
                                                             .format(data!
-                                                                    .tanggalCuti[
-                                                                index]),
+                                                                    .tanggalLeave![
+                                                                index]!),
                                                     style: System.data
                                                         .textStyles!.headLine2,
                                                   ),
@@ -625,6 +636,33 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                       ),
                                     ),
                                   ],
+                                ),
+                                data?.attachment == null || data?.attachment == "" ? const SizedBox() : GestureDetector(
+                                  onTap: (){
+                                     showImageViewer(
+                                        context,
+                                        MemoryImage(
+                                          base64Decode(data?.attachment?.split(',').last ?? ""),
+                                        ),
+                                        immersive: false,
+                                        useSafeArea: true,
+                                        onViewerDismissed: () {},
+                                      );
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    height: 100,
+                                    color: Colors.grey.shade300,
+                                    child: Image.memory(
+                                      base64Decode(data?.attachment?.split(',').last ?? ""),
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return const Center(
+                                          child: Text("Gambar tidak valid"),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(
                                   height: 10,
@@ -646,108 +684,101 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                             const SizedBox(
                                               height: 5,
                                             ),
-                                            ...List.generate(
-                                                data?.persetujuanAtasan
-                                                        .length ??
-                                                    0, (index) {
-                                              return Container(
-                                                margin: const EdgeInsets.only(
-                                                    bottom: 5),
-                                                padding:
-                                                    const EdgeInsets.all(10),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey.shade300,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: Column(
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Expanded(
-                                                          child: Container(
-                                                            color: Colors
-                                                                .transparent,
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  data?.persetujuanAtasan[index]
-                                                                          .namaJabatan ??
-                                                                      "",
-                                                                  style: System
-                                                                      .data
-                                                                      .textStyles!
-                                                                      .headLine3,
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                Text(
-                                                                  data?.persetujuanAtasan[index]
-                                                                          .namaPegawai ??
-                                                                      "",
-                                                                  style: System
-                                                                      .data
-                                                                      .textStyles!
-                                                                      .headLine2,
-                                                                ),
-                                                              ],
-                                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.only(
+                                                  bottom: 5),
+                                              padding: const EdgeInsets.all(10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade300,
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                data?.levelAtasan ??
+                                                                    "",
+                                                                style: System
+                                                                    .data
+                                                                    .textStyles!
+                                                                    .headLine3,
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                data?.namaAtasan ??
+                                                                    "",
+                                                                style: System
+                                                                    .data
+                                                                    .textStyles!
+                                                                    .headLine2,
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                        Expanded(
-                                                          child: Container(
-                                                            color: Colors
-                                                                .transparent,
-                                                            child: Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  data?.persetujuanAtasan[index].tanggalPersetujuan ==
-                                                                          null
-                                                                      ? ""
-                                                                      : DateFormat("dd MMM yyyy", System.data.strings!.locale).format(data!
-                                                                          .persetujuanAtasan[
-                                                                              index]
-                                                                          .tanggalPersetujuan!),
-                                                                  style: System
-                                                                      .data
-                                                                      .textStyles!
-                                                                      .headLine3,
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                Text(
-                                                                  data?.persetujuanAtasan[index]
-                                                                          .namaPersetujuanStatus ??
-                                                                      "",
-                                                                  style: System
-                                                                      .data
-                                                                      .textStyles!
-                                                                      .headLine2
-                                                                      .copyWith(
-                                                                    color: data
-                                                                        ?.persetujuanAtasan[
-                                                                            index]
-                                                                        .warnaPersetujuanStatus,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          color: Colors
+                                                              .transparent,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                data?.aprrovedDate ==
+                                                                        null
+                                                                    ? ""
+                                                                    : DateFormat(
+                                                                            "dd MMM yyyy",
+                                                                            System
+                                                                                .data.strings!.locale)
+                                                                        .format(
+                                                                            data!.aprrovedDate!),
+                                                                style: System
+                                                                    .data
+                                                                    .textStyles!
+                                                                    .headLine3,
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Text(
+                                                                data?.status ??
+                                                                    "",
+                                                                style: System
+                                                                    .data
+                                                                    .textStyles!
+                                                                    .headLine2
+                                                                    .copyWith(
+                                                                        // color: data
+                                                                        //     ?.persetujuanAtasan[
+                                                                        //         index]
+                                                                        //     .warnaPersetujuanStatus,
+                                                                        ),
+                                                              ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                              );
-                                            })
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            )
                                           ],
                                         ),
                                       ),

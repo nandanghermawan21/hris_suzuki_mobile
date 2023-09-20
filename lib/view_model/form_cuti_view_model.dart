@@ -58,7 +58,7 @@ class FormCutiViewModel extends ChangeNotifier {
       idAttendance: leaveId ?? 0,
       reason: alasanCuti.text,
       dates: tanggalCuti,
-      attachment: attachmentController?.getBase64Compress() ?? "",
+      attachment: attachmentController.getBase64Compress() ?? "",
     ).then((value) {
       loadingController.stopLoading(
           message: "Pengajuan Berhasil Terkirim",
