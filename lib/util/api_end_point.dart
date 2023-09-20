@@ -17,6 +17,7 @@ class ApiEndPoint {
   String submitIzin = "attendance/submitIzin";
   String myLeave= "attendance/myLeave";
   String bawahanLeave= "attendance/bawahanLeave";
+  String approvalLeave= "attendance/approvalLeave";
 
 
   String get url {

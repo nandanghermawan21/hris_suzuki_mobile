@@ -30,6 +30,7 @@ class AbsensiViewModel extends ChangeNotifier {
           });
     }).catchError((onError) {
       rejectKehadiranControler.stopLoading(
+        isError: true,
         message:
             "Kehadiran gagal di reject \n ${ErrorHandlingUtil.handleApiError(onError)}",
       );

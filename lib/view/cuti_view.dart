@@ -3,12 +3,13 @@ import 'dart:convert';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:photo_view/photo_view.dart';
+import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/list_data_component.dart';
 import 'package:suzuki/model/leave_model.dart';
 import 'package:suzuki/model/decoration_component.dart';
 import 'package:suzuki/model/jatah_cuti_model.dart';
 import 'package:suzuki/util/system.dart';
+import 'package:suzuki/view_model/cuti_view_model.dart';
 
 class CutiView extends StatefulWidget {
   final VoidCallback onTapBuatCuti;
@@ -22,11 +23,8 @@ class CutiView extends StatefulWidget {
 }
 
 class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
+  CutiViewModel model = CutiViewModel();
   TabController? tabController;
-  ListDataComponentController<LeaveModel> cutiSayaController =
-      ListDataComponentController<LeaveModel>();
-  ListDataComponentController<LeaveModel> butuhPersetujuanController =
-      ListDataComponentController<LeaveModel>();
 
   @override
   void initState() {
@@ -70,8 +68,8 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
               Tab(
                 text: System.data.strings!.myLeave,
               ),
-              Tab(
-                text: System.data.strings!.needApproval,
+              const Tab(
+                text: "Cuti / Izin Karyawan",
               ),
             ],
           ),
@@ -190,7 +188,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
     return Container(
       color: Colors.transparent,
       child: ListDataComponent<LeaveModel>(
-        controller: cutiSayaController,
+        controller: model.cutiSayaController,
         enableDrag: false,
         enableGetMore: true,
         autoSearch: false,
@@ -211,7 +209,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
     return Container(
       color: Colors.transparent,
       child: ListDataComponent<LeaveModel>(
-        controller: butuhPersetujuanController,
+        controller: model.cutiKaryawanController,
         enableDrag: false,
         enableGetMore: true,
         autoSearch: false,
@@ -263,12 +261,12 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                           ? ""
                           : DateFormat("dd MM yyyy HH:mm",
                                   System.data.strings!.locale)
-                              .format(data!.tglPengajuan!),
+                              .format(data!.tglPengajuan!) + " ${data.tglPengajuanTimezoneName ?? ""}",
                       style: System.data.textStyles!.headLine3,
                     ),
                     Container(
                       decoration: BoxDecoration(
-                        color: data?.color,
+                        color: data?.statusColor,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       padding: const EdgeInsets.only(
@@ -338,6 +336,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     child: Container(
@@ -367,6 +366,8 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                     child: Container(
                                       color: Colors.transparent,
                                       child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
@@ -637,33 +638,44 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                     ),
                                   ],
                                 ),
-                                data?.attachment == null || data?.attachment == "" ? const SizedBox() : GestureDetector(
-                                  onTap: (){
-                                     showImageViewer(
-                                        context,
-                                        MemoryImage(
-                                          base64Decode(data?.attachment?.split(',').last ?? ""),
+                                data?.attachment == null ||
+                                        data?.attachment == ""
+                                    ? const SizedBox()
+                                    : GestureDetector(
+                                        onTap: () {
+                                          showImageViewer(
+                                            context,
+                                            MemoryImage(
+                                              base64Decode(data?.attachment
+                                                      ?.split(',')
+                                                      .last ??
+                                                  ""),
+                                            ),
+                                            immersive: false,
+                                            useSafeArea: true,
+                                            onViewerDismissed: () {},
+                                          );
+                                        },
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 100,
+                                          color: Colors.grey.shade300,
+                                          child: Image.memory(
+                                            base64Decode(data?.attachment
+                                                    ?.split(',')
+                                                    .last ??
+                                                ""),
+                                            fit: BoxFit.cover,
+                                            errorBuilder:
+                                                (context, error, stackTrace) {
+                                              return const Center(
+                                                child:
+                                                    Text("Gambar tidak valid"),
+                                              );
+                                            },
+                                          ),
                                         ),
-                                        immersive: false,
-                                        useSafeArea: true,
-                                        onViewerDismissed: () {},
-                                      );
-                                  },
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 100,
-                                    color: Colors.grey.shade300,
-                                    child: Image.memory(
-                                      base64Decode(data?.attachment?.split(',').last ?? ""),
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (context, error, stackTrace) {
-                                        return const Center(
-                                          child: Text("Gambar tidak valid"),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ),
+                                      ),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -739,15 +751,15 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                                                     .start,
                                                             children: [
                                                               Text(
-                                                                data?.aprrovedDate ==
+                                                                data?.approvedDate ==
                                                                         null
                                                                     ? ""
                                                                     : DateFormat(
-                                                                            "dd MMM yyyy",
+                                                                            "dd MMM yyyy hh:mm",
                                                                             System
                                                                                 .data.strings!.locale)
                                                                         .format(
-                                                                            data!.aprrovedDate!),
+                                                                            data!.approvedDate!) + " ${data.approvedTimeZoneName ?? ""}",
                                                                 style: System
                                                                     .data
                                                                     .textStyles!
@@ -764,11 +776,9 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                                                     .textStyles!
                                                                     .headLine2
                                                                     .copyWith(
-                                                                        // color: data
-                                                                        //     ?.persetujuanAtasan[
-                                                                        //         index]
-                                                                        //     .warnaPersetujuanStatus,
-                                                                        ),
+                                                                  color: data
+                                                                      ?.statusColor,
+                                                                ),
                                                               ),
                                                             ],
                                                           ),
@@ -776,6 +786,38 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                                       ),
                                                     ],
                                                   ),
+                                                  data?.approvedReason ==
+                                                              null ||
+                                                          data?.approvedReason ==
+                                                              ""
+                                                      ? const SizedBox()
+                                                      : Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  top: 10),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  top: 5,
+                                                                  bottom: 5),
+                                                          alignment: Alignment
+                                                              .centerLeft,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border(
+                                                              top: BorderSide(
+                                                                color: Colors
+                                                                    .grey
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: Text(
+                                                              data?.approvedReason ??
+                                                                  ""),
+                                                        ),
                                                 ],
                                               ),
                                             )
@@ -796,7 +838,10 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                           children: [
                                             Expanded(
                                               child: ElevatedButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  showApprovalConfirm(
+                                                      data, false);
+                                                },
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty
@@ -817,7 +862,10 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                             ),
                                             Expanded(
                                               child: ElevatedButton(
-                                                onPressed: () {},
+                                                onPressed: () {
+                                                  showApprovalConfirm(
+                                                      data, true);
+                                                },
                                                 style: ButtonStyle(
                                                   backgroundColor:
                                                       MaterialStateProperty
@@ -891,6 +939,121 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
           ),
         ),
       ),
+    );
+  }
+
+  void showApprovalConfirm(LeaveModel? data, bool accept) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.transparent,
+          body: CircularLoaderComponent(
+            controller: model.approvalLeaveController,
+            child: Container(
+              height: double.infinity,
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: IntrinsicHeight(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  accept == true
+                                      ? "Alasan Persetujuan"
+                                      : "Alasan Penolakan",
+                                  style: System.data.textStyles!.headLine3,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextField(
+                                  controller: model.alasanController,
+                                  maxLines: 5,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    hintText: accept == true
+                                        ? "Masukan alasan persetujuan"
+                                        : "Masukkan alasan penolakan",
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: accept == true
+                                        ? System.data.color!.primaryColor
+                                        : Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    model.approvalLeave(context, data?.id ?? 0,
+                                        accept, model.alasanController.text);
+                                  },
+                                  child: Text(
+                                    accept == true ? "Setujui" : 'Tolak',
+                                    style: System.data.textStyles!.headLine3
+                                        .copyWith(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        System.data.color!.primaryColor,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    'Batal',
+                                    style: System.data.textStyles!.headLine3
+                                        .copyWith(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

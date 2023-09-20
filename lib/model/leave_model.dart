@@ -23,8 +23,11 @@ class LeaveModel {
   Color? color; //": "#6ec4b7",
   String? status; //": "Menunggu Persetujuan",
   int? approvedBy; //": null,
-  DateTime? aprrovedDate; //": null
+  DateTime? approvedDate; //": null
   String? attachment;
+  int? approvedTimeZone;
+  String? approvedTimeZoneName;
+  String? approvedReason;
 
   //create contructor
   LeaveModel({
@@ -44,18 +47,36 @@ class LeaveModel {
     this.color,
     this.status,
     this.approvedBy,
-    this.aprrovedDate,
+    this.approvedDate,
     this.attachment,
+    this.approvedTimeZone,
+    this.approvedTimeZoneName,
+    this.approvedReason,
   });
+
+  Color get statusColor{
+    switch (status) {
+      case "Menunggu Persetujuan":
+        return Colors.orange;
+      case "Disetujui":
+        return Colors.green;
+      case "Ditolak":
+        return Colors.red;
+      default:
+        return Colors.grey;
+    }
+  }
 
   //create factory
   factory LeaveModel.fromJson(Map<String, dynamic> json) {
+    int timeZone = json['tgl_pengajuan_timezone'] as int? ?? 7;
+    int approvedDateTimeZone = json['approved_timezone'] as int? ?? 7;
     return LeaveModel(
       id: json['id'],
       idPegawai: json['id_pegawai'],
       tglPengajuan: json['tgl_pengajuan'] == null
           ? null
-          : DateTime.parse(json['tgl_pengajuan']),
+          : DateTime.parse(json['tgl_pengajuan']).add(Duration(hours: timeZone - 7)),
       tglPengajuanTimezone: json['tgl_pengajuan_timezone'],
       tglPengajuanTimezoneName: json['tgl_pengajuan_timezone_name'],
       namaPegawai: json['nama_pegawai'],
@@ -74,10 +95,13 @@ class LeaveModel {
           int.parse(json['color'].substring(1, 7), radix: 16) + 0xFF000000),
       status: json['status'],
       approvedBy: json['approved_by'],
-      aprrovedDate: json['aprroved_date'] == null
+      approvedDate: json['approved_date'] == null
           ? null
-          : DateTime.parse(json['aprroved_date']),
+          : DateTime.parse(json['approved_date']).add(Duration(hours: approvedDateTimeZone - 7)),
       attachment: json['attachment'],
+      approvedTimeZone: json['approved_timezone'],
+      approvedTimeZoneName: json['approved_timezone_name'],
+      approvedReason: json['approved_reason'],
     );
   }
 
@@ -105,8 +129,11 @@ class LeaveModel {
       "color": color?.value.toRadixString(16),
       "status": status,
       "approved_by": approvedBy,
-      "aprroved_date": aprrovedDate?.toIso8601String(),
+      "approved_date": approvedDate?.toIso8601String(),
       "attachment": attachment,
+      "approved_timezone": approvedTimeZone,
+      "approved_timezone_name": approvedTimeZoneName,
+      "approved_reason": approvedReason,
     };
   }
 
@@ -187,6 +214,33 @@ class LeaveModel {
           "dates":
               dates.map((e) => DateFormat('yyyy-MM-dd').format(e)).toList(),
           "attachment": attachment,
+        }).then((value) {
+      return;
+    }).catchError((onError) {
+      throw onError;
+    });
+  }
+
+  //create function approval leave
+  static Future<void> approvalLeave({
+    required String token,
+    required int leaveId,
+    required bool accept,
+    String? reason,
+  }) {
+    return Network.post(
+        url: Uri.parse(
+          System.data.apiEndPoint.url + System.data.apiEndPoint.approvalLeave,
+        ),
+        headers: {
+          HttpHeaders.acceptHeader: "application/json",
+          HttpHeaders.contentMD5Header: "application/json",
+          HttpHeaders.authorizationHeader: "bearer $token",
+        },
+        body: {
+          "leaveId": leaveId,
+          "accept": accept,
+          "reason": reason
         }).then((value) {
       return;
     }).catchError((onError) {
