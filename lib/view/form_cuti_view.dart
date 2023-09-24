@@ -353,42 +353,47 @@ class _FormCutiViewState extends State<FormCutiView> {
                           ),
                         ),
                         child: StreamBuilder(
-                            stream: model
-                                .selectedCategoryAttendanceController.stream,
-                            builder: (d, w) {
-                              return DropdownButton<int>(
-                                isExpanded: true,
-                                underline: const SizedBox(),
-                                value: model.leaveId,
-                                items: List.generate(
-                                  s.data?.length ?? 0,
-                                  (index) {
-                                    return DropdownMenuItem(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          s.data?[index].attendance ?? "",
-                                          style:
-                                              System.data.textStyles!.headLine2,
-                                        ),
+                          stream:
+                              model.selectedCategoryAttendanceController.stream,
+                          builder: (d, w) {
+                            return DropdownButton<int>(
+                              isExpanded: true,
+                              underline: const SizedBox(),
+                              icon: const SizedBox(
+                                  height: 50,
+                                  child: Icon(Icons.arrow_drop_down)),
+                              value: model.leaveId,
+                              items: List.generate(
+                                s.data?.length ?? 0,
+                                (index) {
+                                  return DropdownMenuItem(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        s.data?[index].attendance ?? "",
+                                        style:
+                                            System.data.textStyles!.headLine2,
                                       ),
-                                      value: s.data?[index].idAttendance,
-                                    );
-                                  },
-                                ),
-                                onChanged: (val) {
-                                  model.leaveId = val;
-                                  model.selectedCategoryAttendance = s.data
-                                          ?.firstWhere((element) =>
-                                              element.idAttendance == val) ??
-                                      CategoryAttendanceModel();
-                                  model.selectedCategoryAttendanceController
-                                      .add(model.selectedCategoryAttendance);
-                                  model.tanggalCuti.clear();
-                                  model.commit();
+                                    ),
+                                    value: s.data?[index].idAttendance,
+                                  );
                                 },
-                              );
-                            }),
+                              ),
+                              onChanged: (val) {
+                                model.leaveId = val;
+                                model.selectedCategoryAttendance = s.data
+                                        ?.firstWhere((element) =>
+                                            element.idAttendance == val) ??
+                                    CategoryAttendanceModel();
+                                model.selectedCategoryAttendanceController
+                                    .add(model.selectedCategoryAttendance);
+                                model.focusedDay = null;
+                                model.tanggalCuti.clear();
+                                model.commit();
+                              },
+                            );
+                          },
+                        ),
                       );
                     }
                   },
