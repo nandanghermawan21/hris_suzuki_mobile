@@ -536,8 +536,12 @@ class _FormCutiViewState extends State<FormCutiView> {
                         },
                         firstDay: DateTime.now()
                             .add(const Duration(days: (365 * -10))),
-                        lastDay: DateTime(
-                            DateTime.now().year + 1, DateTime.june, 31),
+                        lastDay:
+                            (model.selectedCategoryAttendance.canNextDate ??
+                                    true)
+                                ? DateTime(
+                                    DateTime.now().year + 1, DateTime.june, 31)
+                                : DateTime.now(),
                         rangeStartDay: model.rangeEndDay,
                         rangeEndDay: model.rangeEndDay,
                       ),

@@ -339,7 +339,9 @@ class HomeViewState extends State<HomeView> {
                 child: Text(
                   System.data.global.user?.nama ??
                       System.data.strings!.employeName,
-                  style: System.data.textStyles!.headLine1,
+                  style: System.data.textStyles!.headLine1.copyWith(
+                    color: Colors.white
+                  ),
                 ),
               ),
             ),
@@ -356,6 +358,7 @@ class HomeViewState extends State<HomeView> {
                       System.data.global.myProfile?.namaJabatan ?? "",
                       style: System.data.textStyles!.headLine1.copyWith(
                         fontWeight: FontWeight.normal,
+                        color: Colors.white
                       ),
                     );
                   },

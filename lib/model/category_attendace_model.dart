@@ -13,6 +13,7 @@ class CategoryAttendanceModel {
   int? batasPengajuanBulan;
   String? sex;
   String? pickerDateMode;
+  bool? canNextDate;
 
   //create constructor
   CategoryAttendanceModel({
@@ -25,6 +26,7 @@ class CategoryAttendanceModel {
     this.batasPengajuan,
     this.batasPengajuanBulan,
     this.pickerDateMode,
+    this.canNextDate,
   });
 
   //create function to get data from json
@@ -39,6 +41,7 @@ class CategoryAttendanceModel {
       batasPengajuan: json['batas_pengajuan'] as int?,
       batasPengajuanBulan: json['batas_pengajuan_bulan'] as int?,
       pickerDateMode: json['picker_date_mode'] as String?,
+      canNextDate: (json['can_next_date'] as int?) == 1 ? true : false,
     );
   }
 
@@ -54,6 +57,7 @@ class CategoryAttendanceModel {
       'batas_pengajuan': batasPengajuan,
       'batas_pengajuan_bulan': batasPengajuanBulan,
       'picker_date_mode': pickerDateMode,
+      'can_next_date': canNextDate,
     };
   }
 
