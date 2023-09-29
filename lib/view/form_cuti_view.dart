@@ -5,8 +5,8 @@ import 'package:skeleton_text/skeleton_text.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/image_picker_component.dart';
 import 'package:suzuki/model/decoration_component.dart';
-import 'package:suzuki/model/jatah_cuti_model.dart';
 import 'package:suzuki/model/category_attendace_model.dart';
+import 'package:suzuki/util/error_handling_util.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view_model/form_cuti_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -100,20 +100,61 @@ class _FormCutiViewState extends State<FormCutiView> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: IntrinsicHeight(
-          child: Row(
-            children: List.generate(
-              JatahCutiModel.dummy().length,
-              (index) {
-                return jatahCutiItem(JatahCutiModel.dummy()[index]);
-              },
+          child: FutureBuilder<List<CategoryAttendanceModel>>(
+            future: CategoryAttendanceModel.getCutiTersedia(
+              token: System.data.global.token ?? "",
             ),
+            builder: (c, s) {
+              if (s.connectionState == ConnectionState.done) {
+                if (s.hasData) {
+                  if ((s.data ?? []).isEmpty) {
+                    return const SizedBox(
+                      height: 100,
+                      width: double.infinity,
+                      child: Center(
+                        child: Text("Anda Tidak Memiliki Jath Cuti"),
+                      ),
+                    );
+                  } else {
+                    return Row(
+                      children: List.generate(
+                        s.data?.length ?? 0,
+                        (index) {
+                          return s.data?[index] == null
+                              ? const SizedBox()
+                              : jatahCutiItem(s.data![index]);
+                        },
+                      ),
+                    );
+                  }
+                } else {
+                  return SizedBox(
+                    height: 100,
+                    width: double.infinity,
+                    child: Center(
+                      child: Text(ErrorHandlingUtil.handleApiError(s.error)),
+                    ),
+                  );
+                }
+              } else {
+                return SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: SkeletonAnimation(
+                      child: const SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                  )),
+                );
+              }
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget jatahCutiItem(JatahCutiModel data) {
+  Widget jatahCutiItem(CategoryAttendanceModel data) {
     return Container(
       width: 80,
       padding: const EdgeInsets.all(5),
@@ -136,12 +177,12 @@ class _FormCutiViewState extends State<FormCutiView> {
             height: 50,
             width: 50,
             decoration: BoxDecoration(
-              color: data.warnaCuti,
+              color: data.color,
               borderRadius: BorderRadius.circular(50),
             ),
             child: Center(
               child: Text(
-                "${data.sisaCuti}",
+                "${data.allowanceLeft}",
                 style: System.data.textStyles!.boldTitleLightLabel.copyWith(
                   fontSize: 20,
                 ),
@@ -152,7 +193,7 @@ class _FormCutiViewState extends State<FormCutiView> {
             height: 10,
           ),
           Text(
-            "${data.namaTipeCuti}",
+            "${data.attendance} (${data.allowanceYear}})",
             style: System.data.textStyles!.boldTitleLabel,
             textAlign: TextAlign.center,
           ),
@@ -160,10 +201,10 @@ class _FormCutiViewState extends State<FormCutiView> {
             height: 2,
           ),
           Text(
-            data.tangalKadalaursa == null
+            data.expiredDate == null
                 ? ""
                 : DateFormat("dd MMM yyyy", System.data.strings!.locale)
-                    .format(data.tangalKadalaursa!),
+                    .format(data.expiredDate!),
             style: System.data.textStyles!.basicLabel,
             textAlign: TextAlign.center,
           ),
@@ -323,7 +364,17 @@ class _FormCutiViewState extends State<FormCutiView> {
                         }).catchError((onError) {
                           debugPrint("error $onError");
                         })
-                      : Future.value().then((value) => []),
+                      : model.leaveType == 'cuti'
+                          ? CategoryAttendanceModel.getCutiTersedia(
+                              token: System.data.global.token ?? "",
+                            ).then((value) {
+                              debugPrint("total data ${value.length}");
+                              return value;
+                              // ignore: body_might_complete_normally_catch_error
+                            }).catchError((onError) {
+                              debugPrint("error $onError");
+                            })
+                          : Future.value([]),
                   builder: (c, s) {
                     if (s.connectionState == ConnectionState.waiting) {
                       return SkeletonAnimation(
@@ -370,7 +421,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
-                                        s.data?[index].attendance ?? "",
+                                        "${s.data?[index].attendance ?? ""} ${s.data?[index].type == 'cuti' ? '(${s.data?[index].allowanceYear})' : ''}",
                                         style:
                                             System.data.textStyles!.headLine2,
                                       ),
@@ -380,6 +431,7 @@ class _FormCutiViewState extends State<FormCutiView> {
                                 },
                               ),
                               onChanged: (val) {
+                                debugPrint("val $val");
                                 model.leaveId = val;
                                 model.selectedCategoryAttendance = s.data
                                         ?.firstWhere((element) =>
@@ -632,7 +684,11 @@ class _FormCutiViewState extends State<FormCutiView> {
   Widget submitButton() {
     return GestureDetector(
       onTap: () {
-        model.submitIzin(onSuccess: widget.onSubmitSucess);
+        if (model.selectedCategoryAttendance.type == 'cuti') {
+          model.submitCuti(onSuccess: widget.onSubmitSucess);
+        } else if (model.selectedCategoryAttendance.type == 'izin') {
+          model.submitIzin(onSuccess: widget.onSubmitSucess);
+        }
       },
       child: Container(
         width: double.infinity,

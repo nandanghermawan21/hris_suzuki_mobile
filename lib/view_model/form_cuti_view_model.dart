@@ -74,6 +74,54 @@ class FormCutiViewModel extends ChangeNotifier {
     });
   }
 
+  void submitCuti({VoidCallback? onSuccess}) {
+    if (leaveType == null) {
+      loadingController.stopLoading(
+        message: "Mohon pilih tipe formulir",
+        isError: true,
+      );
+      return;
+    }
+
+    if (leaveId == null) {
+      loadingController.stopLoading(
+        message: "Mohon pilih kategory $leaveType",
+        isError: true,
+      );
+      return;
+    }
+
+    if (tanggalCuti.isEmpty) {
+      loadingController.stopLoading(
+        message: "Mohon pilih tanggal cuti",
+        isError: true,
+      );
+      return;
+    }
+
+    loadingController.startLoading();
+    LeaveModel.submitCuti(
+      token: System.data.global.token ?? "",
+      idAllowance: selectedCategoryAttendance.allowanceId ?? 0,
+      idAttendance: leaveId ?? 0,
+      reason: alasanCuti.text,
+      dates: tanggalCuti,
+      attachment: attachmentController.getBase64Compress() ?? "",
+    ).then((value) {
+      loadingController.stopLoading(
+          message: "Pengajuan Berhasil Terkirim",
+          isError: false,
+          onCloseCallBack: () {
+            onSuccess?.call();
+          });
+    }).catchError((onError) {
+      loadingController.stopLoading(
+        message: ErrorHandlingUtil.handleApiError(onError),
+        isError: true,
+      );
+    });
+  }
+
   bool validateTanggal() {
     //check apakah jumlah tanggal sudah melebihi batas
     if (selectedCategoryAttendance.count != null) {

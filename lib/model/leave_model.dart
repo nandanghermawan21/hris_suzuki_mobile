@@ -54,7 +54,7 @@ class LeaveModel {
     this.approvedReason,
   });
 
-  Color get statusColor{
+  Color get statusColor {
     switch (status) {
       case "Menunggu Persetujuan":
         return Colors.orange;
@@ -76,7 +76,8 @@ class LeaveModel {
       idPegawai: json['id_pegawai'],
       tglPengajuan: json['tgl_pengajuan'] == null
           ? null
-          : DateTime.parse(json['tgl_pengajuan']).add(Duration(hours: timeZone - 7)),
+          : DateTime.parse(json['tgl_pengajuan'])
+              .add(Duration(hours: timeZone - 7)),
       tglPengajuanTimezone: json['tgl_pengajuan_timezone'],
       tglPengajuanTimezoneName: json['tgl_pengajuan_timezone_name'],
       namaPegawai: json['nama_pegawai'],
@@ -92,12 +93,14 @@ class LeaveModel {
               .map((e) => e == null ? null : DateTime.parse(e))
               .toList(growable: false),
       color: Color(
-          int.parse(json['color'].substring(1, 7), radix: 16) + 0xFF000000),
+          int.parse((json['color'] ?? '#6ec4b7').substring(1, 7), radix: 16) +
+              0xFF000000),
       status: json['status'],
       approvedBy: json['approved_by'],
       approvedDate: json['approved_date'] == null
           ? null
-          : DateTime.parse(json['approved_date']).add(Duration(hours: approvedDateTimeZone - 7)),
+          : DateTime.parse(json['approved_date'])
+              .add(Duration(hours: approvedDateTimeZone - 7)),
       attachment: json['attachment'],
       approvedTimeZone: json['approved_timezone'],
       approvedTimeZoneName: json['approved_timezone_name'],
@@ -209,6 +212,38 @@ class LeaveModel {
           HttpHeaders.authorizationHeader: "bearer $token",
         },
         body: {
+          "idAttendance": idAttendance,
+          "reason": reason,
+          "dates":
+              dates.map((e) => DateFormat('yyyy-MM-dd').format(e)).toList(),
+          "attachment": attachment,
+        }).then((value) {
+      return;
+    }).catchError((onError) {
+      throw onError;
+    });
+  }
+
+  //create function to get data from api
+  static Future<void> submitCuti({
+    required String token,
+    required int idAllowance,
+    required int idAttendance,
+    required String reason,
+    required List<DateTime> dates,
+    String attachment = "",
+  }) {
+    return Network.post(
+        url: Uri.parse(
+          System.data.apiEndPoint.url + System.data.apiEndPoint.submitCuti,
+        ),
+        headers: {
+          HttpHeaders.acceptHeader: "application/json",
+          HttpHeaders.contentMD5Header: "application/json",
+          HttpHeaders.authorizationHeader: "bearer $token",
+        },
+        body: {
+          "idAllowance": idAllowance,
           "idAttendance": idAttendance,
           "reason": reason,
           "dates":

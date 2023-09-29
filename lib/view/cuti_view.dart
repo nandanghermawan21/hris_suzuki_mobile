@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:skeleton_text/skeleton_text.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/list_data_component.dart';
+import 'package:suzuki/model/category_attendace_model.dart';
 import 'package:suzuki/model/leave_model.dart';
 import 'package:suzuki/model/decoration_component.dart';
-import 'package:suzuki/model/jatah_cuti_model.dart';
+import 'package:suzuki/util/error_handling_util.dart';
 import 'package:suzuki/util/system.dart';
 import 'package:suzuki/view_model/cuti_view_model.dart';
 
@@ -112,20 +114,61 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: IntrinsicHeight(
-          child: Row(
-            children: List.generate(
-              JatahCutiModel.dummy().length,
-              (index) {
-                return jatahCutiItem(JatahCutiModel.dummy()[index]);
-              },
+          child: FutureBuilder<List<CategoryAttendanceModel>>(
+            future: CategoryAttendanceModel.getCutiTersedia(
+              token: System.data.global.token ?? "",
             ),
+            builder: (c, s) {
+              if (s.connectionState == ConnectionState.done) {
+                if (s.hasData) {
+                  if ((s.data ?? []).isEmpty) {
+                    return const SizedBox(
+                      height: 100,
+                      width: double.infinity,
+                      child: Center(
+                        child: Text("Anda Tidak Memiliki Jath Cuti"),
+                      ),
+                    );
+                  } else {
+                    return Row(
+                      children: List.generate(
+                        s.data?.length ?? 0,
+                        (index) {
+                          return s.data?[index] == null
+                              ? const SizedBox()
+                              : jatahCutiItem(s.data![index]);
+                        },
+                      ),
+                    );
+                  }
+                } else {
+                  return SizedBox(
+                    height: 100,
+                    width: double.infinity,
+                    child: Center(
+                      child: Text(ErrorHandlingUtil.handleApiError(s.error)),
+                    ),
+                  );
+                }
+              } else {
+                return SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: SkeletonAnimation(
+                      child: const SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                  )),
+                );
+              }
+            },
           ),
         ),
       ),
     );
   }
 
-  Widget jatahCutiItem(JatahCutiModel data) {
+  Widget jatahCutiItem(CategoryAttendanceModel data) {
     return Container(
       width: 80,
       padding: const EdgeInsets.all(5),
@@ -148,12 +191,12 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
             height: 50,
             width: 50,
             decoration: BoxDecoration(
-              color: data.warnaCuti,
+              color: data.color,
               borderRadius: BorderRadius.circular(50),
             ),
             child: Center(
               child: Text(
-                "${data.sisaCuti}",
+                "${data.allowanceLeft}",
                 style: System.data.textStyles!.boldTitleLightLabel.copyWith(
                   fontSize: 20,
                 ),
@@ -164,7 +207,7 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
             height: 10,
           ),
           Text(
-            "${data.namaTipeCuti}",
+            "${data.attendance} (${data.allowanceYear}})",
             style: System.data.textStyles!.boldTitleLabel,
             textAlign: TextAlign.center,
           ),
@@ -172,10 +215,10 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
             height: 2,
           ),
           Text(
-            data.tangalKadalaursa == null
+            data.expiredDate == null
                 ? ""
                 : DateFormat("dd MMM yyyy", System.data.strings!.locale)
-                    .format(data.tangalKadalaursa!),
+                    .format(data.expiredDate!),
             style: System.data.textStyles!.basicLabel,
             textAlign: TextAlign.center,
           ),
@@ -686,152 +729,161 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                data?.idAtasan == null ? const SizedBox() : Row(
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        color: Colors.transparent,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Persetujuan",
-                                              style: System
-                                                  .data.textStyles!.headLine3,
-                                            ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
-                                            Container(
-                                              margin: const EdgeInsets.only(
-                                                  bottom: 5),
-                                              padding: const EdgeInsets.all(10),
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey.shade300,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
+                                data?.idAtasan == null
+                                    ? const SizedBox()
+                                    : Row(
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              color: Colors.transparent,
                                               child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: Container(
-                                                          color: Colors
-                                                              .transparent,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                data?.levelAtasan ??
-                                                                    "",
-                                                                style: System
-                                                                    .data
-                                                                    .textStyles!
-                                                                    .headLine3,
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Text(
-                                                                data?.namaAtasan ??
-                                                                    "",
-                                                                style: System
-                                                                    .data
-                                                                    .textStyles!
-                                                                    .headLine2,
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        child: Container(
-                                                          color: Colors
-                                                              .transparent,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                data?.approvedDate ==
-                                                                        null
-                                                                    ? ""
-                                                                    : DateFormat("dd MMM yyyy hh:mm",
-                                                                                System.data.strings!.locale)
-                                                                            .format(data!.approvedDate!) +
-                                                                        " ${data.approvedTimeZoneName ?? ""}",
-                                                                style: System
-                                                                    .data
-                                                                    .textStyles!
-                                                                    .headLine3,
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Text(
-                                                                data?.status ??
-                                                                    "",
-                                                                style: System
-                                                                    .data
-                                                                    .textStyles!
-                                                                    .headLine2
-                                                                    .copyWith(
-                                                                  color: data
-                                                                      ?.statusColor,
+                                                  Text(
+                                                    "Persetujuan",
+                                                    style: System.data
+                                                        .textStyles!.headLine3,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5,
+                                                  ),
+                                                  Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            bottom: 5),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          Colors.grey.shade300,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                    ),
+                                                    child: Column(
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Container(
+                                                                color: Colors
+                                                                    .transparent,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      data?.levelAtasan ??
+                                                                          "",
+                                                                      style: System
+                                                                          .data
+                                                                          .textStyles!
+                                                                          .headLine3,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height: 5,
+                                                                    ),
+                                                                    Text(
+                                                                      data?.namaAtasan ??
+                                                                          "",
+                                                                      style: System
+                                                                          .data
+                                                                          .textStyles!
+                                                                          .headLine2,
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  data?.approvedReason ==
-                                                              null ||
-                                                          data?.approvedReason ==
-                                                              ""
-                                                      ? const SizedBox()
-                                                      : Container(
-                                                          margin:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  top: 10),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  top: 5,
-                                                                  bottom: 5),
-                                                          alignment: Alignment
-                                                              .centerLeft,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            border: Border(
-                                                              top: BorderSide(
+                                                            ),
+                                                            Expanded(
+                                                              child: Container(
                                                                 color: Colors
-                                                                    .grey
-                                                                    .withOpacity(
-                                                                        0.5),
+                                                                    .transparent,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      data?.approvedDate ==
+                                                                              null
+                                                                          ? ""
+                                                                          : DateFormat("dd MMM yyyy hh:mm", System.data.strings!.locale).format(data!.approvedDate!) +
+                                                                              " ${data.approvedTimeZoneName ?? ""}",
+                                                                      style: System
+                                                                          .data
+                                                                          .textStyles!
+                                                                          .headLine3,
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height: 5,
+                                                                    ),
+                                                                    Text(
+                                                                      data?.status ??
+                                                                          "",
+                                                                      style: System
+                                                                          .data
+                                                                          .textStyles!
+                                                                          .headLine2
+                                                                          .copyWith(
+                                                                        color: data
+                                                                            ?.statusColor,
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          child: Text(
-                                                              data?.approvedReason ??
-                                                                  ""),
+                                                          ],
                                                         ),
+                                                        data?.approvedReason ==
+                                                                    null ||
+                                                                data?.approvedReason ==
+                                                                    ""
+                                                            ? const SizedBox()
+                                                            : Container(
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        top:
+                                                                            10),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        top: 5,
+                                                                        bottom:
+                                                                            5),
+                                                                alignment: Alignment
+                                                                    .centerLeft,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  border:
+                                                                      Border(
+                                                                    top:
+                                                                        BorderSide(
+                                                                      color: Colors
+                                                                          .grey
+                                                                          .withOpacity(
+                                                                              0.5),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                child: Text(
+                                                                    data?.approvedReason ??
+                                                                        ""),
+                                                              ),
+                                                      ],
+                                                    ),
+                                                  )
                                                 ],
                                               ),
-                                            )
-                                          ],
-                                        ),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                  ],
-                                ),
                                 const SizedBox(
                                   height: 10,
                                 ),
