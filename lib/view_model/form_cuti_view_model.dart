@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/image_picker_component.dart';
 import 'package:suzuki/model/category_attendace_model.dart';
@@ -146,34 +147,48 @@ class FormCutiViewModel extends ChangeNotifier {
   }
 
   bool validateTanggalPengajuan(DateTime tanggalPengajuan) {
-    DateTime? batasPengajuan = tanggalPengajuan;
-    DateTime? tangalSekarang =
-        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    if (selectedCategoryAttendance.batasPengajuanBulan != null) {
-      batasPengajuan = DateTime(
-          batasPengajuan.year,
-          batasPengajuan.month +
-              (selectedCategoryAttendance.batasPengajuanBulan ?? 0),
-          batasPengajuan.day);
-    }
-    if (selectedCategoryAttendance.batasPengajuan != null) {
-      batasPengajuan = DateTime(
-          batasPengajuan.year,
-          batasPengajuan.month,
-          batasPengajuan.day +
-              (selectedCategoryAttendance.batasPengajuan ?? 0));
-    }
-    // debugPrint("batas pengajuan ${selectedCategoryAttendance.batasPengajuanBulan} $tanggalPengajuan => $batasPengajuan => $tangalSekarang");
-    if (batasPengajuan.isAfter(tangalSekarang) ||
-        batasPengajuan == tangalSekarang) {
-      return true;
+    if (selectedCategoryAttendance.type == 'cuti') {
+      if (tanggalPengajuan
+          .isAfter(selectedCategoryAttendance.expiredDate ?? DateTime.now())) {
+        loadingController.stopLoading(
+          isError: true,
+          message:
+              "Tanggal pengajuan melebihi batas masa berlaku \n Batas masa berlaku cuti ${selectedCategoryAttendance.attendance} ${selectedCategoryAttendance.allowanceYear} adalah ${selectedCategoryAttendance.expiredDate == null ? "" : DateFormat('dd MMMM yyyy', 'id_ID').format(selectedCategoryAttendance.expiredDate!)})",
+        );
+        return false;
+      } else {
+        return true;
+      }
     } else {
-      loadingController.stopLoading(
-        isError: true,
-        message:
-            "Tanggal pengajuan melebihi batas pengajuan \n Batas maksimal pengajuan ${selectedCategoryAttendance.attendance} adalah ${selectedCategoryAttendance.batasPengajuanBulan != null && selectedCategoryAttendance.batasPengajuanBulan != 0 ? selectedCategoryAttendance.batasPengajuanBulan.toString() + " bulan" : ""} ${selectedCategoryAttendance.batasPengajuanBulan != null && selectedCategoryAttendance.batasPengajuan != 0 ? selectedCategoryAttendance.batasPengajuan.toString() + " hari" : ""}",
-      );
-      return false;
+      DateTime? batasPengajuan = tanggalPengajuan;
+      DateTime? tangalSekarang = DateTime(
+          DateTime.now().year, DateTime.now().month, DateTime.now().day);
+      if (selectedCategoryAttendance.batasPengajuanBulan != null) {
+        batasPengajuan = DateTime(
+            batasPengajuan.year,
+            batasPengajuan.month +
+                (selectedCategoryAttendance.batasPengajuanBulan ?? 0),
+            batasPengajuan.day);
+      }
+      if (selectedCategoryAttendance.batasPengajuan != null) {
+        batasPengajuan = DateTime(
+            batasPengajuan.year,
+            batasPengajuan.month,
+            batasPengajuan.day +
+                (selectedCategoryAttendance.batasPengajuan ?? 0));
+      }
+      // debugPrint("batas pengajuan ${selectedCategoryAttendance.batasPengajuanBulan} $tanggalPengajuan => $batasPengajuan => $tangalSekarang");
+      if (batasPengajuan.isAfter(tangalSekarang) ||
+          batasPengajuan == tangalSekarang) {
+        return true;
+      } else {
+        loadingController.stopLoading(
+          isError: true,
+          message:
+              "Tanggal pengajuan melebihi batas pengajuan \n Batas maksimal pengajuan ${selectedCategoryAttendance.attendance} adalah ${selectedCategoryAttendance.batasPengajuanBulan != null && selectedCategoryAttendance.batasPengajuanBulan != 0 ? selectedCategoryAttendance.batasPengajuanBulan.toString() + " bulan" : ""} ${selectedCategoryAttendance.batasPengajuanBulan != null && selectedCategoryAttendance.batasPengajuan != 0 ? selectedCategoryAttendance.batasPengajuan.toString() + " hari" : ""}",
+        );
+        return false;
+      }
     }
   }
 
