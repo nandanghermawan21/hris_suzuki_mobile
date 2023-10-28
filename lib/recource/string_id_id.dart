@@ -249,4 +249,10 @@ class StringsIdId extends Strings {
 
   @override
   String get attachment => "Lampiran";
+
+  @override
+  String get sactionsAndReword => "Sanksi &\nPenghargaan";
+
+  @override
+  String get requestLoan => "Permohonan\nPinjaman";
 }

@@ -143,4 +143,8 @@ abstract class Strings {
   String get category => "Category";
 
   String get attachment => "Attachment";
+
+  String get sactionsAndReword => "Sactions &\nReword";
+
+  String get requestLoan => "Request\nLoan";
 }

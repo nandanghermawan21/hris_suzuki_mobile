@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:suzuki/component/circular_loader_component.dart';
 import 'package:suzuki/component/image_picker_component.dart';
@@ -66,8 +67,8 @@ class HomeViewState extends State<HomeView> {
         },
       ),
       MenuModel(
-        title: System.data.strings!.requestLemurs,
-        icon: Icons.lock_clock,
+        title: System.data.strings!.requestLoan,
+        icon: Icons.upload_file_outlined,
         iconBackgroundColor: Colors.pinkAccent,
         backgroundColor: Colors.white,
         iconColor: Colors.white,
@@ -98,14 +99,14 @@ class HomeViewState extends State<HomeView> {
           widget.onTapAttendance!();
         },
       ),
-      MenuModel(
-        title: System.data.strings!.lemurs,
-        icon: Icons.lock_clock,
-        iconBackgroundColor: Colors.orange,
-        backgroundColor: Colors.white,
-        iconColor: Colors.white,
-        onTap: () {},
-      ),
+      // MenuModel(
+      //   title: System.data.strings!.lemurs,
+      //   icon: Icons.lock_clock,
+      //   iconBackgroundColor: Colors.orange,
+      //   backgroundColor: Colors.white,
+      //   iconColor: Colors.white,
+      //   onTap: () {},
+      // ),
       MenuModel(
         title: System.data.strings!.salary,
         icon: Icons.file_present_sharp,
@@ -130,6 +131,14 @@ class HomeViewState extends State<HomeView> {
       //   iconColor: Colors.white,
       //   onTap: () {},
       // ),
+      MenuModel(
+        title: System.data.strings!.sactionsAndReword,
+        icon: Icons.star_half,
+        iconBackgroundColor: Colors.orange,
+        backgroundColor: Colors.white,
+        iconColor: Colors.white,
+        onTap: () {},
+      ),
       MenuModel(
         title: System.data.strings!.loan,
         icon: Icons.money,
