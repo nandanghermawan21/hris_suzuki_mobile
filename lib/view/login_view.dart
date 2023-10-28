@@ -15,11 +15,13 @@ import '../util/enum.dart';
 class LoginView extends StatefulWidget {
   final VoidCallback? onLoginSuccess;
   final VoidCallback? onTapProfile;
+  final VoidCallback? onTapActivasiAkun;
 
   const LoginView({
     Key? key,
     this.onLoginSuccess,
     this.onTapProfile,
+    this.onTapActivasiAkun,
   }) : super(key: key);
 
   @override
@@ -164,8 +166,9 @@ class LoginViewState extends State<LoginView> {
                               GestureDetector(
                                 onTap: () {
                                   Clipboard.setData(ClipboardData(
-                                          text:
-                                              System.data.deviceInfo?.deviceId ?? ''))
+                                          text: System
+                                                  .data.deviceInfo?.deviceId ??
+                                              ''))
                                       .then((value) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
@@ -276,35 +279,24 @@ class LoginViewState extends State<LoginView> {
                       Container(
                         color: Colors.transparent,
                         width: double.infinity,
-                        margin: const EdgeInsets.all(20),
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          // children: [
-                          //   Row(
-                          //     children: [
-                          //       Text(
-                          //         System.data.strings!.rememberMe,
-                          //         style: TextStyle(
-                          //           color: System.data.color!.darkTextColor,
-                          //           fontSize: System.data.font!.m,
-                          //           fontWeight: FontWeight.bold,
-                          //         ),
-                          //       ),
-                          //       const SizedBox(
-                          //         width: 5,
-                          //       ),
-                          //       Checkbox(value: false, onChanged: (v) {})
-                          //     ],
-                          //   ),
-                          //   Text(
-                          //     System.data.strings!.forgotPassword,
-                          //     style: TextStyle(
-                          //       color: System.data.color!.link,
-                          //       fontSize: System.data.font!.m,
-                          //       fontWeight: FontWeight.bold,
-                          //     ),
-                          //   ),
-                          // ],
+                        margin: const EdgeInsets.only(top: 15, bottom: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            GestureDetector(
+                              onTap: (){
+                                widget.onTapActivasiAkun?.call();
+                              },
+                              child: Text(
+                               "Aktivasi Akun",
+                                style: TextStyle(
+                                  color: System.data.color!.link,
+                                  fontSize: System.data.font!.m,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Container(

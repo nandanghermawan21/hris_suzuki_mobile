@@ -9,6 +9,7 @@ import 'package:suzuki/view/profile_view.dart';
 import 'package:suzuki/view/cuti_view.dart';
 import 'package:suzuki/view/form_cuti_view.dart';
 import 'package:suzuki/view/absensi_view.dart';
+import 'package:suzuki/view/activasi_akun_view.dart';
 
 String initialRouteName = RouteName.splashScreen;
 
@@ -21,6 +22,7 @@ class RouteName {
   static const String cuti = "leave";
   static const String formCuti = "formLeave";
   static const String absensi = "absensi";
+  static const String activasiAkun = "activasiAkun";
 }
 
 enum ParamName {
@@ -47,6 +49,9 @@ Map<String, WidgetBuilder> route = {
     return LoginView(
       onLoginSuccess: () {
         Navigator.of(context).pushReplacementNamed(RouteName.home);
+      },
+      onTapActivasiAkun: (){
+        Navigator.of(context).pushNamed(RouteName.activasiAkun);
       },
     );
   },
@@ -101,5 +106,10 @@ Map<String, WidgetBuilder> route = {
   },
   RouteName.absensi: (BuildContext context) {
     return const AbsensiView();
+  },
+  RouteName.activasiAkun: (BuildContext context) {
+    return  ActivasiAkunView(onActivasiSuccess: () { 
+      Navigator.of(context).pop();
+     },);
   },
 };

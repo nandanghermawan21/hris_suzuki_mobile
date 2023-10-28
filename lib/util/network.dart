@@ -28,7 +28,7 @@ class Network {
         "Client-Timestamp": formatISOTime(timeStamp),
         "Access-Control_Allow_Origin": "*",
         "deviceImei": System.data.deviceInfo?.imei ?? "",
-        "deviceId": System.data.deviceInfo?.deviceId ?? "",
+        "Device-Id": System.data.deviceInfo?.deviceId ?? "",
         "deviceModel": System.data.deviceInfo?.deviceModel ?? "",
         "deviceOs": Platform.isAndroid ? "A" : "I",
         "deviiceOsVersion": Platform.operatingSystemVersion,

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:intl/intl.dart';
 import 'package:suzuki/util/network.dart';
 import 'package:suzuki/util/system.dart';
 
@@ -67,7 +70,44 @@ class UserModel {
       },
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Device-Id": System.data.deviceInfo?.deviceId ?? "",
+      },
+    ).then((value) {
+      return value == null ? null : UserModel.fromJson((value));
+    }).catchError(
+      (onError) {
+        throw onError;
+      },
+    );
+  }
+
+  static Future<UserModel?> activasi({
+    required String? nip,
+    required String? nama,
+    required DateTime? tglLahir,
+    required DateTime? tglMulaiKerja,
+    required String? password,
+  }) {
+    return Network.post(
+      url: Uri.parse(
+        System.data.apiEndPoint.url + System.data.apiEndPoint.activasiUrl,
+      ),
+      otpRequired: null,
+      body: {
+        "nip": nip ?? "",
+        "nama": nama ?? "",
+        "tglLahir": tglLahir == null
+            ? ""
+            : DateFormat("yyyy-MM-dd", System.data.strings!.locale)
+                .format(tglLahir),
+        "tglMulaiKerja": tglMulaiKerja == null
+            ? ""
+            : DateFormat("yyyy-MM-dd", System.data.strings!.locale)
+                .format(tglMulaiKerja),
+        "password": password ?? "",
+      },
+      headers: {
+        HttpHeaders.acceptHeader: "application/json",
+        HttpHeaders.contentMD5Header: "application/json",
       },
     ).then((value) {
       return value == null ? null : UserModel.fromJson((value));
