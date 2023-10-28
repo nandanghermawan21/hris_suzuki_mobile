@@ -141,4 +141,6 @@ abstract class Strings {
   String get galery => "Galery";
 
   String get category => "Category";
+
+  String get attachment => "Attachment";
 }

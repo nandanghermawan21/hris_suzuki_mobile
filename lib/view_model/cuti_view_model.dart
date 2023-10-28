@@ -39,6 +39,31 @@ class CutiViewModel extends ChangeNotifier {
     });
   }
 
+   void cancelLeave(
+      BuildContext context, int idLeave, String alasan) {
+    approvalLeaveController.startLoading();
+    LeaveModel.cancelLeave(
+      token: System.data.global.token ?? "",
+      leaveId: idLeave,
+      reason: alasan,
+    ).then((value) {
+      approvalLeaveController.stopLoading(
+          message: "permohonan pembatalan berhasil terkirim",
+          onCloseCallBack: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+            commit();
+            cutiKaryawanController.refresh();
+          });
+    }).catchError((onError) {
+      approvalLeaveController.stopLoading(
+        isError: true,
+        message:
+            "permohonan pembatalan gagal terkirim \n ${ErrorHandlingUtil.handleApiError(onError)}",
+      );
+    });
+  }
+
   void commit() {
     notifyListeners();
   }

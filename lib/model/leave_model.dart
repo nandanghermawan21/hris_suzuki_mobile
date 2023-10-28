@@ -58,10 +58,18 @@ class LeaveModel {
     switch (status) {
       case "Menunggu Persetujuan":
         return Colors.orange;
+      case "Menunggu Persetujuan Pembatalan":
+        return const Color.fromARGB(255, 233, 92, 10);
       case "Disetujui":
         return Colors.green;
+      case "Pembatalan Disetujui":
+        return const Color.fromARGB(255, 55, 1, 1);
       case "Ditolak":
         return Colors.red;
+      case "Pembatalan Ditolak":
+        return Colors.teal.shade900;
+      case "Dibatalkan":
+        return Colors.grey.shade600;
       default:
         return Colors.grey;
     }
@@ -275,6 +283,30 @@ class LeaveModel {
         body: {
           "leaveId": leaveId,
           "accept": accept,
+          "reason": reason
+        }).then((value) {
+      return;
+    }).catchError((onError) {
+      throw onError;
+    });
+  }
+
+  static Future<void> cancelLeave({
+    required String token,
+    required int leaveId,
+    String? reason,
+  }) {
+    return Network.post(
+        url: Uri.parse(
+          System.data.apiEndPoint.url + System.data.apiEndPoint.cancelLeave,
+        ),
+        headers: {
+          HttpHeaders.acceptHeader: "application/json",
+          HttpHeaders.contentMD5Header: "application/json",
+          HttpHeaders.authorizationHeader: "bearer $token",
+        },
+        body: {
+          "leaveId": leaveId,
           "reason": reason
         }).then((value) {
       return;

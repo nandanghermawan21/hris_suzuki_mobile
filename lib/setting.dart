@@ -14,7 +14,7 @@ import 'package:suzuki/util/system.dart';
 import 'package:suzuki/route.dart' as route;
 
 void setting() {
-  System.data.versionName = "1.1.6";
+  System.data.versionName = "1.0.7";
   System.data.route = route.route;
   System.data.apiEndPoint = ApiEndPoint();
   System.data.strings = StringsIdId();

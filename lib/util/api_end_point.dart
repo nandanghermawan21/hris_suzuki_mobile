@@ -1,8 +1,8 @@
 import 'package:suzuki/util/mode_util.dart';
 
 class ApiEndPoint {
-  String baseUrl = "http://192.168.1.2/hris_suzuki_api/api/";
-  String baseUrlDebug = "http://192.168.1.2/hris_suzuki_api/api/";
+  String baseUrl = "http://192.168.1.3/hris_suzuki_api/api/";
+  String baseUrlDebug = "http://192.168.1.3/hris_suzuki_api/api/";
   String webSocketUrl = "";
   String webSocketUrlDebug = "";
   String loginUrl = "auth/login";
@@ -17,6 +17,7 @@ class ApiEndPoint {
   String cutiTersedia = "attendance/getCutiTersedia";
   String submitIzin = "attendance/submitIzin";
   String submitCuti = "attendance/submitCuti";
+  String cancelLeave = "attendance/cancelLeave";
   String myLeave= "attendance/myLeave";
   String bawahanLeave= "attendance/bawahanLeave";
   String approvalLeave= "attendance/approvalLeave";

@@ -79,7 +79,9 @@ class _FormCutiViewState extends State<FormCutiView> {
                 const SizedBox(
                   height: 20,
                 ),
-                attachment(),
+                Consumer<FormCutiViewModel>(builder: (c,d,w){
+                  return d.selectedCategoryAttendance.type == 'izin' ? attachment() : const SizedBox();
+                }),
                 const SizedBox(
                   height: 20,
                 ),
@@ -656,7 +658,7 @@ class _FormCutiViewState extends State<FormCutiView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            System.data.strings!.leaveReason,
+            System.data.strings!.attachment,
             style: System.data.textStyles!.headLine3,
           ),
           const SizedBox(

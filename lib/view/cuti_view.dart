@@ -144,9 +144,12 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                 } else {
                   return SizedBox(
                     height: 100,
-                    width: double.infinity,
                     child: Center(
-                      child: Text(ErrorHandlingUtil.handleApiError(s.error)),
+                      child: Text(
+                        ErrorHandlingUtil.handleApiError(s.error),
+                        style: System.data.textStyles!.basicLabel
+                            .copyWith(color: Colors.red),
+                      ),
                     ),
                   );
                 }
@@ -941,7 +944,10 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                           ],
                                         )
                                       : ElevatedButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            showCancellConfirm(data);
+                                          },
                                           style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty
@@ -1073,6 +1079,115 @@ class CutiViewState extends State<CutiView> with TickerProviderStateMixin {
                                   },
                                   child: Text(
                                     accept == true ? "Setujui" : 'Tolak',
+                                    style: System.data.textStyles!.headLine3
+                                        .copyWith(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor:
+                                        System.data.color!.primaryColor,
+                                  ),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    'Batal',
+                                    style: System.data.textStyles!.headLine3
+                                        .copyWith(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showCancellConfirm(LeaveModel? data) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.transparent,
+          body: CircularLoaderComponent(
+            controller: model.approvalLeaveController,
+            child: Container(
+              height: double.infinity,
+              color: Colors.transparent,
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: IntrinsicHeight(
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text(
+                                  "Alasan Pembatalan",
+                                  style: System.data.textStyles!.headLine3,
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                TextField(
+                                  controller: model.alasanController,
+                                  maxLines: 5,
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    hintText: "Masukan alasan pembatalan",
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red,
+                                  ),
+                                  onPressed: () {
+                                    model.cancelLeave(context, data?.id ?? 0,
+                                        model.alasanController.text);
+                                  },
+                                  child: Text(
+                                    "Kirim",
                                     style: System.data.textStyles!.headLine3
                                         .copyWith(
                                       color: Colors.white,

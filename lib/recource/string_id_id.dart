@@ -172,7 +172,7 @@ class StringsIdId extends Strings {
   String get dataHasBeenUpdated => "Data telah terupdate";
 
   @override
-  String get internetConnestionError => "Gagal terhubung ke jaringan internet";
+  String get internetConnestionError => "Gagal terhubung ke server";
 
   @override
   String get checkInCheckOutAttendance => "Check In/Out\nKehadiran";
@@ -246,4 +246,7 @@ class StringsIdId extends Strings {
 
   @override
   String get category => "Kategori";
+
+  @override
+  String get attachment => "Lampiran";
 }
